@@ -79,7 +79,7 @@ public class Ctrl_Producto {
         Connection cn = Conexion.conectar();
         try {
 
-            PreparedStatement consulta = cn.prepareStatement("update producto set nombre=?, stock = ?, precio_venta = ?, descripcion= ?, iva = ?, id_categoria = ? WHERE id='" + idProducto + "'");
+            PreparedStatement consulta = cn.prepareStatement("UPDATE producto set nombre=?, stock = ?, precio_venta = ?, descripcion= ?, iva = ?, id_categoria = ? WHERE cod_producto='" + idProducto + "'");
             consulta.setString(1, objeto.getNombre());
             consulta.setInt(2, objeto.getCantidad());
             consulta.setDouble(3, objeto.getPrecio());

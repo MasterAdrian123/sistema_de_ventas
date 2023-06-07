@@ -249,6 +249,7 @@ public class InterGestionarProducto extends javax.swing.JInternalFrame {
 
                         //idcategoria - cargar metodo que obtiene el id de categoria
                         this.IdCategoria();
+                        
                         producto.setIdCategoria(obtenerIdCategoriaCombo);
                         //producto.setEstado(1);
 
@@ -459,14 +460,14 @@ public class InterGestionarProducto extends javax.swing.JInternalFrame {
         try {
             Connection con = Conexion.conectar();
             PreparedStatement pst = con.prepareStatement(
-                    "select * from producto where cod_producto = '" + idProducto + "'");
+                    "SELECT * FROM producto WHERE cod_producto = '" + idProducto + "'");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 txt_nombre.setText(rs.getString("nombre"));
                 txt_cantidad.setText(rs.getString("stock"));
                 txt_precio.setText(rs.getString("precio_venta"));
                 txt_descripcion.setText(rs.getString("descripcion"));
-                int iva = rs.getInt("porcentajeIva");
+                int iva = rs.getInt("iva");
                 switch (iva) {
                     case 0:
                         jComboBox_iva.setSelectedItem("No grava iva");
@@ -485,7 +486,7 @@ public class InterGestionarProducto extends javax.swing.JInternalFrame {
                         break;
                 }
                 //int idCate = rs.getInt("categoria");
-                jComboBox_categoria.setSelectedItem(rs.getString("categoria"));
+                jComboBox_categoria.setSelectedItem(relacionarCategoria(rs.getInt("id_categoria")));
             }
             con.close();
         } catch (SQLException e) {
@@ -507,7 +508,7 @@ public class InterGestionarProducto extends javax.swing.JInternalFrame {
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                descripcionCategoria = rs.getString("categoria");
+                descripcionCategoria = rs.getString("descripcion");
             }
             cn.close();
 
@@ -522,14 +523,14 @@ public class InterGestionarProducto extends javax.swing.JInternalFrame {
      * Metodo para obtener id categoria
      */
     private int IdCategoria() {
-        String sql = "select * from tb_categoria where descripcion = '" + this.jComboBox_categoria.getSelectedItem() + "'";
+        String sql = "select id from categoria where descripcion = '" + this.jComboBox_categoria.getSelectedItem() + "'";
         Statement st;
         try {
             Connection cn = Conexion.conectar();
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                obtenerIdCategoriaCombo = rs.getInt("categoria");
+                obtenerIdCategoriaCombo = rs.getInt("id");
             }
         } catch (SQLException e) {
             System.out.println("Error al obener id categoria");
