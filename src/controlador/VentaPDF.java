@@ -85,32 +85,13 @@ public class VentaPDF {
             PdfWriter.getInstance(doc, archivo);
             doc.open();
 
-            Image img = Image.getInstance("src/img/ventas.png");
+           
             Paragraph fecha = new Paragraph();
             Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
             fecha.add(Chunk.NEWLINE); //agregar nueva linea
             fecha.add("Factura: 001" + "\nFecha: " + fechaActual + "\n\n");
 
-            PdfPTable Encabezado = new PdfPTable(4);
-            Encabezado.setWidthPercentage(100);
-            Encabezado.getDefaultCell().setBorder(0);//quitar el borde de la tabla
-            //tamaño de las celdas
-            float[] ColumnaEncabezado = new float[]{20f, 30f, 70f, 40f};
-            Encabezado.setWidths(ColumnaEncabezado);
-            Encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
-            //agregar celdas
-            Encabezado.addCell(img);
-
-            String ruc = "0987654321001";
-            String nombre = "Fantasma Cooporation";
-            String telefono = "0987654321";
-            String direccion = "Tamarindo City";
-            String razon = "La magia de la programacion, esta en el poder de tu imaginacion";
-
-            Encabezado.addCell("");//celda vacia
-            Encabezado.addCell("RUC: " + ruc + "\nNOMBRE: " + nombre + "\nTELEFONO: " + telefono + "\nDIRECCION: " + direccion + "\nRAZON SOCIAL: " + razon);
-            Encabezado.addCell(fecha);
-            doc.add(Encabezado);
+           
 
             //CUERPO
             Paragraph cliente = new Paragraph();
