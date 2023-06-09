@@ -266,7 +266,7 @@ public class InterProducto extends javax.swing.JInternalFrame {
      */
     private void CargarComboCategorias() {
         Connection cn = Conexion.conectar();
-        String sql = "select * from tb_categoria";
+        String sql = "select * from categoria";
         Statement st;
 
         try {
@@ -290,14 +290,14 @@ public class InterProducto extends javax.swing.JInternalFrame {
      * Metodo para obtener id categoria
      */
     private int IdCategoria() {
-        String sql = "select * from tb_categoria where descripcion = '" + this.jComboBox_categoria.getSelectedItem() + "'";
+        String sql = "select * from categoria where descripcion = '" + this.jComboBox_categoria.getSelectedItem() + "'";
         Statement st;
         try {
             Connection cn = Conexion.conectar();
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                obtenerIdCategoriaCombo = rs.getInt("idCategoria");
+                obtenerIdCategoriaCombo = rs.getInt("id");
             }
         } catch (SQLException e) {
             System.out.println("Error al obener id categoria");

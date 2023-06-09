@@ -167,7 +167,7 @@ public class InterUsuario extends javax.swing.JInternalFrame {
                 
                 if (controlUsuario.guardar(usuario,this.Administrador.isSelected())) {
                     JOptionPane.showMessageDialog(null, "¡Usuario Registrado!");
-                    Administrador.setSelected(false);
+                    Administrador.setSelected(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "¡Error al registrar Usuario!");
                 }

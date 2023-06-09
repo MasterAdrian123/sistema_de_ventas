@@ -24,10 +24,10 @@ public class Ctrl_Categoria {
         Connection cn = conexion.Conexion.conectar();
         try {
 
-            PreparedStatement consulta = cn.prepareStatement("insert into tb_categoria values(?,?,?)");
-            consulta.setInt(1, 0);
-            consulta.setString(2, objeto.getDescripcion());
-            consulta.setInt(3, objeto.getEstado());
+            PreparedStatement consulta = cn.prepareStatement("insert into categoria (descripcion, estado ) values(?,?)");
+            //consulta.setInt(1, 0);
+            consulta.setString(1, objeto.getDescripcion());
+            consulta.setInt(2, objeto.getEstado());
 
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
@@ -49,7 +49,7 @@ public class Ctrl_Categoria {
      */
     public boolean existeCategoria(String categoria) {
         boolean respuesta = false;
-        String sql = "select descripcion from tb_categoria where descripcion = '" + categoria + "';";
+        String sql = "select descripcion from categoria where descripcion = '" + categoria + "';";
         Statement st;
 
         try {
@@ -76,7 +76,7 @@ public class Ctrl_Categoria {
         Connection cn = conexion.Conexion.conectar();
         try {
 
-            PreparedStatement consulta = cn.prepareStatement("update tb_categoria set descripcion=? where idCategoria ='" + idCategoria + "'");
+            PreparedStatement consulta = cn.prepareStatement("update categoria set descripcion=? where id ='" + idCategoria + "'");
             consulta.setString(1, objeto.getDescripcion());
            
             if (consulta.executeUpdate() > 0) {
@@ -104,7 +104,7 @@ public class Ctrl_Categoria {
         try {
 
             PreparedStatement consulta = cn.prepareStatement(
-                    "delete from tb_categoria where idCategoria ='" + idCategoria + "'");
+                    "delete from categoria where id ='" + idCategoria + "'");
             consulta.executeUpdate();
            
             if (consulta.executeUpdate() > 0) {
