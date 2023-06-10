@@ -8,10 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import modelo.Producto;
 
-/**
- *
- * @author Edison Zambrano - © Programador Fantasma
- */
 public class Ctrl_Producto {
      /**
      * **************************************************

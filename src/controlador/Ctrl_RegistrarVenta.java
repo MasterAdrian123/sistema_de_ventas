@@ -26,7 +26,7 @@ public class Ctrl_RegistrarVenta {
         boolean respuesta = false;
         Connection cn = Conexion.conectar();
         try {
-            PreparedStatement consulta = cn.prepareStatement("insert into tb_cabecera_venta values(?,?,?,?,?)",
+            PreparedStatement consulta = cn.prepareStatement("insert into pedido values(?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             consulta.setInt(1, 0);//id
             consulta.setInt(2, objeto.getIdCliente());

@@ -75,7 +75,7 @@ create table producto(
 cod_producto int(5) primary key auto_increment,
 nombre varchar(15) not null,
 stock int (100), 
-precio_venta float (8,2) not null,
+precio_venta double (8,2) not null,
 descripcion varchar (200) not null,
 iva int(4) not null,
 id_categoria int(3) not null,
@@ -91,13 +91,42 @@ insert into producto values
 (7,'pc',10,120000.00,'pc dacell gaming',12,8),
 (8,'zapato',10,27000.00,'zapatos nike original,',7,7);
 
-SELECT 
-  p.cod_producto, p.nombre, p.stock, p.precio_venta, p.descripcion , p.iva, c.descripcion AS categoria
-FROM 
-  producto AS p
-INNER JOIN 
-  categoria AS c ON p.id_categoria = c.id;
+create table cabecera(
+id int(3) primary key auto_increment,
+idCliente varchar(20) not null,
+constraint foreign key Fk_idCliente(idCliente) references cliente(id),
+valorPago double(8,2) not null,
+fecha date not null,
+estado int (1) not null
+);
 
+create table pedido(
+id int(3) primary key auto_increment,
+idProducto int(5) not null,
+constraint foreign key Fk_idProducto_detalle(idProducto) references producto(cod_producto),
+idCliente varchar(20) not null,
+constraint foreign key Fk_idCliente(idCliente) references cliente(id),
+cantidad int (2) not null,
+precio double(8,2) not null,
+subtotal double(10,2) not null,
+descuento double(8,2) not null,
+iva double(8,2) not null,
+totalProducto double(10,2) not null,
+estado int(1) not null
+);
+insert into pedido values (1,3,'1',5,1500.00,4800.00,120.00,7,40000.00,2);
+insert into pedido values (2,3,'1',5,1500.00,4800.00,120.00,7,40000.00,1);
 
+drop table carrito;
+create table carrito(
+idCliente varchar(25),
+constraint foreign key FK_idCliente(idCliente) references cliente(id),
+idPedido int (3) not null,
+constraint foreign key(idPedido) references pedido(id),
+estado int(1) not null,
+fecha date not null,
+totalCompra double(10,2) not null
+);
 -- select * from administrador;
 -- select * from cliente;
+select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento, p.iva, p.totalProducto, p.estado FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto

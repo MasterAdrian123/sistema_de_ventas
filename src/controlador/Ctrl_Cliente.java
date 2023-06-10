@@ -8,10 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import modelo.Cliente;
 
-/**
- *
- * @author Edison Zambrano - © Programador Fantasma
- */
+
 public class Ctrl_Cliente {
 
     /**

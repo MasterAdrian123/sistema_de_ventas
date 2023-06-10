@@ -42,14 +42,14 @@ public class VentaPDF {
     //metodo para obtener datos del cliente
     public void DatosCliente(int idCliente) {
         Connection cn = Conexion.conectar();
-        String sql = "select * from tb_cliente where idCliente = '" + idCliente + "'";
+        String sql = "select * from cliente where id = '" + String.valueOf(idCliente) + "'";
         Statement st;
         try {
 
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                nombreCliente = rs.getString("nombre") + " " + rs.getString("apellido");
+                nombreCliente = rs.getString("nombre") + " " + rs.getString("P_apellido");
                 cedulaCliente = rs.getString("cedula");
                 telefonoCliente = rs.getString("telefono");
                 direccionCliente = rs.getString("direccion");
@@ -101,11 +101,11 @@ public class VentaPDF {
             //agregar celdas
             Encabezado.addCell(img);
 
-            String ruc = "0987654321001";
-            String nombre = "Fantasma Cooporation";
-            String telefono = "0987654321";
-            String direccion = "Tamarindo City";
-            String razon = "La magia de la programacion, esta en el poder de tu imaginacion";
+            String ruc = "ADRIAN DAVID ISIDRO && JUAN FELIPE BEJARANO";
+            String nombre = "F&A";
+            String telefono = "3024400170";
+            String direccion = "LLAMAR A ADRIAN";
+            String razon = "proyecto de grado tomado de distintas fuentes como base teorica y de estructura";
 
             Encabezado.addCell("");//celda vacia
             Encabezado.addCell("RUC: " + ruc + "\nNOMBRE: " + nombre + "\nTELEFONO: " + telefono + "\nDIRECCION: " + direccion + "\nRAZON SOCIAL: " + razon);

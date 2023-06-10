@@ -319,7 +319,7 @@ public class InterGestionarCliente extends javax.swing.JInternalFrame {
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 txt_nombre.setText(rs.getString("nombre"));
-                txt_apellido.setText(rs.getString("apellido"));
+                txt_apellido.setText(rs.getString("p_apellido"));
                 txt_cedula.setText(rs.getString("cedula"));
                 txt_telefono.setText(rs.getString("telefono"));
                 txt_direccion.setText(rs.getString("direccion"));

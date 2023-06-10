@@ -1,14 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package modelo;
 
-public class DetalleVenta {
-
+/**
+ *
+ * @author Usuario
+ */
+public class Pedido {
     //Atributos
-    private int idDetalleVenta;
-    private int idCabeceraVenta;
+    //private int idPedido;
+    private String idCliente;
     private int idProducto;
     
-    //esta de mas
-    private String nombre;
+    //detalles del producto
     private int cantidad;
     private double precioUnitario;
     private double subTotal;
@@ -18,11 +24,10 @@ public class DetalleVenta {
     private int estado;
 
     //Contructor
-    public DetalleVenta() {
-        this.idDetalleVenta = 0;
-        this.idCabeceraVenta = 0;
+    public Pedido() {
+        //this.idPedido = 0;
+        this.idCliente = "";
         this.idProducto = 0;
-        this.nombre = "";
         this.cantidad = 0;
         this.precioUnitario = 0.0;
         this.subTotal = 0.0;
@@ -34,11 +39,10 @@ public class DetalleVenta {
     
     //Contructor sobrebargado
 
-    public DetalleVenta(int idDetalleVenta, int idCabeceraVenta, int idProducto, String nombre, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado) {
-        this.idDetalleVenta = idDetalleVenta;
-        this.idCabeceraVenta = idCabeceraVenta;
+    public Pedido(int idPedido, String idCliente, int idProducto, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado) {
+        //this.idPedido = idPedido;
+        this.idCliente = idCliente;
         this.idProducto = idProducto;
-        this.nombre = nombre;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subTotal = subTotal;
@@ -50,20 +54,20 @@ public class DetalleVenta {
     
     //get and set
 
-    public int getIdDetalleVenta() {
-        return idDetalleVenta;
+//    public int getIdPedido() {
+//        return idPedido;
+//    }
+//
+//    public void setIdPedido(int pedido) {
+//        this.idPedido = pedido;
+//    }
+
+    public String getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdDetalleVenta(int idDetalleVenta) {
-        this.idDetalleVenta = idDetalleVenta;
-    }
-
-    public int getIdCabeceraVenta() {
-        return idCabeceraVenta;
-    }
-
-    public void setIdCabeceraVenta(int idCabeceraVenta) {
-        this.idCabeceraVenta = idCabeceraVenta;
+    public void setIdCabeceraVenta(String cliente) {
+        this.idCliente = cliente;
     }
 
     public int getIdProducto() {
@@ -72,14 +76,6 @@ public class DetalleVenta {
 
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public int getCantidad() {
@@ -142,7 +138,7 @@ public class DetalleVenta {
 
     @Override
     public String toString() {
-        return "DetalleVenta{" + "idDetalleVenta=" + idDetalleVenta + ", idCabeceraVenta=" + idCabeceraVenta + ", idProducto=" + idProducto + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + ", subTotal=" + subTotal + ", descuento=" + descuento + ", iva=" + iva + ", totalPagar=" + totalPagar + ", estado=" + estado + '}';
+        return "DetalleVenta{" + "idPedido=" + idCliente + ", cliente=" + idCliente + ", idProducto=" + idProducto + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + ", subTotal=" + subTotal + ", descuento=" + descuento + ", iva=" + iva + ", totalPagar=" + totalPagar + ", estado=" + estado + '}';
     }
     
 

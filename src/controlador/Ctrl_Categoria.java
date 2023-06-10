@@ -8,10 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import modelo.Categoria;
 
-/**
- *
- * @author Edison Zambrano - © Programador Fantasma
- */
+
 public class Ctrl_Categoria {
 
     /**

@@ -7,7 +7,7 @@ import javax.swing.JDesktopPane;
 public class FrmMenu extends javax.swing.JFrame {
     public boolean Admin;
     public static JDesktopPane jDesktopPane_menu;
-
+    public String cedulaUsuario;
     public FrmMenu() {
         Admin = false;
         initComponents();
@@ -23,7 +23,14 @@ public class FrmMenu extends javax.swing.JFrame {
         int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
         FrmMenu.jDesktopPane_menu.setBounds(0, 0, ancho, (alto - 110));
         this.add(jDesktopPane_menu);
-
+    }
+    
+    public void setCedulaUsuario(String cedula){
+        this.cedulaUsuario = cedula;
+    }
+    
+    public String getCedulaUsuario(){
+        return cedulaUsuario;
     }
 
     /**
@@ -383,6 +390,8 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void jMenuItem_nueva_ventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nueva_ventaActionPerformed
         InterFacturacion interFacturacion = new InterFacturacion();
+        interFacturacion.txt_cliente_buscar.setText(cedulaUsuario);
+        interFacturacion.txt_cliente_buscar.disable();
         jDesktopPane_menu.add(interFacturacion);
         interFacturacion.setVisible(true);
     }//GEN-LAST:event_jMenuItem_nueva_ventaActionPerformed
