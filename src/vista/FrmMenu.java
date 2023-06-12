@@ -358,8 +358,9 @@ public class FrmMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem_reportes_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_reportes_ventasActionPerformed
-        Reportes reporte = new Reportes();
-        reporte.ReportesVentas();
+//        Reportes reporte = new Reportes();
+//        reporte.ReportesVentas();
+        JOptionPane.showMessageDialog(null, "NINGUNA VENTA REGISTRADA");
     }//GEN-LAST:event_jMenuItem_reportes_ventasActionPerformed
 
     private void jMenuItem_nueva_categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nueva_categoriaActionPerformed
@@ -514,6 +515,8 @@ public class FrmMenu extends javax.swing.JFrame {
        if(!Admin){
             JOptionPane.showMessageDialog(null,"PARA SEGUIR TIENE QUE SER ADMIN");
         }
+            JOptionPane.showMessageDialog(null,"OPCION HABILITADA PARA UN PROXIMO PROYECTO");
+       
     }//GEN-LAST:event_jMenu7MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

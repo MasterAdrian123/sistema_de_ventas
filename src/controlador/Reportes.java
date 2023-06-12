@@ -34,7 +34,7 @@ public class Reportes {
         Document documento = new Document();
         try {
             String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Clientes.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream("src/pdf/c1Reporte_Clientes.pdf"));
             Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
@@ -60,7 +60,7 @@ public class Reportes {
             try {
                 Connection cn = Conexion.conectar();
                 PreparedStatement pst = cn.prepareStatement(
-                        "select idCliente, concat(nombre, ' ', apellido) as nombres, cedula, telefono, direccion from tb_cliente");
+                        "select id, concat(nombre, ' ', p_apellido) as nombres, cedula, telefono, direccion from cliente");
                 ResultSet rs = pst.executeQuery();
                 if (rs.next()) {
                     do {
@@ -77,7 +77,7 @@ public class Reportes {
                 System.out.println("Error 4 en: " + e);
             }
             documento.close();
-            
+
             JOptionPane.showMessageDialog(null, "Reporte creado");
 
         } catch (DocumentException e) {
@@ -88,7 +88,7 @@ public class Reportes {
             System.out.println("Error 3 en: " + ex);
         }
     }
-    
+
     /* ********************************************************************
     * metodo para crear reportes de los productos registrados en el sistema
     *********************************************************************** */
@@ -96,7 +96,7 @@ public class Reportes {
         Document documento = new Document();
         try {
             String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Productos.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream("src/pdf/Reporte_Productos.pdf"));
             Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
@@ -111,7 +111,7 @@ public class Reportes {
             //agregamos los datos
             documento.add(header);
             documento.add(parrafo);
-            
+
             float[] columnsWidths = {3, 5, 4, 5, 7, 5, 6};
 
             PdfPTable tabla = new PdfPTable(columnsWidths);
@@ -126,10 +126,10 @@ public class Reportes {
             try {
                 Connection cn = Conexion.conectar();
                 PreparedStatement pst = cn.prepareStatement(
-                        "select p.idProducto, p.nombre, p.cantidad, p.precio, p.descripcion, "
-                                + "p.porcentajeIva, c.descripcion as categoria, p.estado "
-                                + "from tb_producto as p, tb_categoria as c "
-                                + "where p.idCategoria = c.idCategoria;");
+                        "select p.cod_producto, p.nombre, p.stock, p.precio_venta, p.descripcion, "
+                        + "p.iva, c.descripcion as categoria "
+                        + "from producto as p, categoria as c "
+                        + "where p.id_categoria = c.id;");
                 ResultSet rs = pst.executeQuery();
                 if (rs.next()) {
                     do {
@@ -148,7 +148,7 @@ public class Reportes {
                 System.out.println("Error 4 en: " + e);
             }
             documento.close();
-            
+
             JOptionPane.showMessageDialog(null, "Reporte creado");
 
         } catch (DocumentException e) {
@@ -159,15 +159,15 @@ public class Reportes {
             System.out.println("Error 3 en: " + ex);
         }
     }
-    
-        /* ********************************************************************
+
+    /* ********************************************************************
     * metodo para crear reportes de los categorias registrados en el sistema
     *********************************************************************** */
     public void ReportesCategorias() {
         Document documento = new Document();
         try {
             String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Categorias.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream("src/pdf/Reporte_Categorias.pdf"));
             Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
@@ -191,7 +191,7 @@ public class Reportes {
             try {
                 Connection cn = Conexion.conectar();
                 PreparedStatement pst = cn.prepareStatement(
-                        "select * from tb_categoria");
+                        "select * from categoria");
                 ResultSet rs = pst.executeQuery();
                 if (rs.next()) {
                     do {
@@ -206,7 +206,7 @@ public class Reportes {
                 System.out.println("Error 4 en: " + e);
             }
             documento.close();
-            
+
             JOptionPane.showMessageDialog(null, "Reporte creado");
 
         } catch (DocumentException e) {
@@ -217,73 +217,74 @@ public class Reportes {
             System.out.println("Error 3 en: " + ex);
         }
     }
-    
-        /* ********************************************************************
+}
+
+    /* ********************************************************************
     * metodo para crear reportes de las ventas registrados en el sistema
     *********************************************************************** */
-    public void ReportesVentas() {
-        Document documento = new Document();
-        try {
-            String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Ventas.pdf"));
-            Image header = Image.getInstance("src/img/Background.jpg");
-            header.scaleToFit(650, 1000);
-            header.setAlignment(Chunk.ALIGN_CENTER);
-            //formato al texto
-            Paragraph parrafo = new Paragraph();
-            parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
-            parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
-            parrafo.add("Reporte de Ventas \n\n");
-
-            documento.open();
-            //agregamos los datos
-            documento.add(header);
-            documento.add(parrafo);
-            
-            float[] columnsWidths = {3, 9, 4, 5, 3};
-
-            PdfPTable tabla = new PdfPTable(columnsWidths);
-            tabla.addCell("Codigo");
-            tabla.addCell("Cliente");
-            tabla.addCell("Tot. Pagar");
-            tabla.addCell("Fecha Venta");
-            tabla.addCell("Estado");
-
-            try {
-                Connection cn = Conexion.conectar();
-                PreparedStatement pst = cn.prepareStatement(
-                        "select cv.idCabeceraVenta as id, concat(c.nombre, ' ', c.apellido) as cliente, "
-                                + "cv.valorPagar as total, cv.fechaVenta as fecha, cv.estado "
-                                + "from tb_cabecera_venta as cv, tb_cliente as c "
-                                + "where cv.idCliente = c.idCliente;");
-                ResultSet rs = pst.executeQuery();
-                if (rs.next()) {
-                    do {
-                        tabla.addCell(rs.getString(1));
-                        tabla.addCell(rs.getString(2));
-                        tabla.addCell(rs.getString(3));
-                        tabla.addCell(rs.getString(4));
-                        tabla.addCell(rs.getString(5));
-
-                    } while (rs.next());
-                    documento.add(tabla);
-                }
-
-            } catch (SQLException e) {
-                System.out.println("Error 4 en: " + e);
-            }
-            documento.close();
-            
-            JOptionPane.showMessageDialog(null, "Reporte creado");
-
-        } catch (DocumentException e) {
-            System.out.println("Error 1 en: " + e);
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error 2 en: " + ex);
-        } catch (IOException ex) {
-            System.out.println("Error 3 en: " + ex);
-        }
-    }
-
-}
+//    public void ReportesVentas() {
+//        Document documento = new Document();
+//        try {
+//            String ruta = System.getProperty("user.home");
+//            PdfWriter.getInstance(documento, new FileOutputStream("src/pdf/Reporte_Ventas.pdf"));
+//            Image header = Image.getInstance("src/img/Background.jpg");
+//            header.scaleToFit(650, 1000);
+//            header.setAlignment(Chunk.ALIGN_CENTER);
+//            //formato al texto
+//            Paragraph parrafo = new Paragraph();
+//            parrafo.setAlignment(Paragraph.ALIGN_CENTER);
+//            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
+//            parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
+//            parrafo.add("Reporte de Ventas \n\n");
+//
+//            documento.open();
+//            //agregamos los datos
+//            documento.add(header);
+//            documento.add(parrafo);
+//            
+//            float[] columnsWidths = {3, 9, 4, 5, 3};
+//
+//            PdfPTable tabla = new PdfPTable(columnsWidths);
+//            tabla.addCell("Codigo");
+//            tabla.addCell("Cliente");
+//            tabla.addCell("Tot. Pagar");
+//            tabla.addCell("Fecha Venta");
+//            tabla.addCell("Estado");
+//
+//            try {
+//                Connection cn = Conexion.conectar();
+//                PreparedStatement pst = cn.prepareStatement(
+//                        "select cv.idCabeceraVenta as id, concat(c.nombre, ' ', c.apellido) as cliente, "
+//                                + "cv.valorPagar as total, cv.fechaVenta as fecha, cv.estado "
+//                                + "from tb_cabecera_venta as cv, tb_cliente as c "
+//                                + "where cv.idCliente = c.idCliente;");
+//                ResultSet rs = pst.executeQuery();
+//                if (rs.next()) {
+//                    do {
+//                        tabla.addCell(rs.getString(1));
+//                        tabla.addCell(rs.getString(2));
+//                        tabla.addCell(rs.getString(3));
+//                        tabla.addCell(rs.getString(4));
+//                        tabla.addCell(rs.getString(5));
+//
+//                    } while (rs.next());
+//                    documento.add(tabla);
+//                }
+//
+//            } catch (SQLException e) {
+//                System.out.println("Error 4 en: " + e);
+//            }
+//            documento.close();
+//            
+//            JOptionPane.showMessageDialog(null, "Reporte creado");
+//
+//        } catch (DocumentException e) {
+//            System.out.println("Error 1 en: " + e);
+//        } catch (FileNotFoundException ex) {
+//            System.out.println("Error 2 en: " + ex);
+//        } catch (IOException ex) {
+//            System.out.println("Error 3 en: " + ex);
+//        }
+//    }
+//
+//}
