@@ -159,4 +159,23 @@ public class Ctrl_Producto {
         }
          return id;
      }
+     
+     public String nombreProducto(int id){
+        String nombre="";
+        String sql = "select nombre from producto where cod_producto= " + id + ";";
+        Statement st;
+
+        try {
+            Connection cn = Conexion.conectar();
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                nombre = rs.getString("nombre");
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error al consultar producto: " + e);
+        }
+         return nombre;
+     }
 }

@@ -168,8 +168,8 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
         try {
             Connection cn = Conexion.conectar();
             PreparedStatement pst = cn.prepareStatement(
-                    "select idCliente, concat(nombre, ' ', apellido) as cliente "
-                    + "from tb_cliente where concat(nombre, ' ', apellido) = '" + cliente + "'");
+                    "select id, concat(nombre, ' ', p_apellido) as cliente "
+                    + "from cliente where concat(nombre, ' ', p_apellido) = '" + cliente + "'");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 idCliente = rs.getInt("idCliente");
@@ -242,9 +242,9 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
     private void CargarTablaVentas() {
         Connection con = Conexion.conectar();
         DefaultTableModel model = new DefaultTableModel();
-        String sql = "select cv.idCabeceraVenta as id, concat(c.nombre, ' ', c.apellido) as cliente, "
-                + "cv.valorPagar as total, cv.fechaVenta as fecha, cv.estado "
-                + "from tb_cabecera_venta as cv, tb_cliente as c where cv.idCliente = c.idCliente;";
+        String sql = "select c.id as id, concat(cl.nombre, ' ', cl.apellido) as cliente, "
+                + "c.totalCompra as total, c.fecha as fecha, c.estado , c.cant"
+                + "from carrito as c, cliente as cl where c.idCliente = cl.id;";
         Statement st;
         try {
             st = con.createStatement();
@@ -257,10 +257,11 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
             model.addColumn("Total Pagar");
             model.addColumn("Fecha Venta");
             model.addColumn("estado");
+            model.addColumn("Articulos");
 
             while (rs.next()) {
-                Object fila[] = new Object[5];
-                for (int i = 0; i < 5; i++) {
+                Object fila[] = new Object[6];
+                for (int i = 0; i < 6; i++) {
                     if (i == 4) {
                         String estado = String.valueOf(rs.getObject(i + 1));
                         if (estado.equalsIgnoreCase("1")) {
@@ -304,9 +305,9 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
         try {
             Connection con = Conexion.conectar();
             PreparedStatement pst = con.prepareStatement(
-                    "select cv.idCabeceraVenta, cv.idCliente, concat(c.nombre, ' ', c.apellido) as cliente, "
-                    + "cv.valorPagar, cv.fechaVenta, cv.estado  from tb_cabecera_venta as cv, "
-                    + "tb_cliente as c where  cv.idCabeceraVenta = '" + idVenta + "' and cv.idCliente = c.idCliente;");
+                    "select c.id, c.idCliente, concat(cl.nombre, ' ', cl.apellido) as cliente, "
+                    + "c.totalCompra, c.fecha, c.estado  from carrito as c, "
+                    + "cliente as cl where  c.id = '" + idVenta + "' and c.idCliente = cl.id;");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 jComboBox_cliente.setSelectedItem(rs.getString("cliente"));
@@ -330,7 +331,7 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
      */
     private void CargarComboClientes() {
         Connection cn = Conexion.conectar();
-        String sql = "select * from tb_cliente";
+        String sql = "select * from cliente";
         Statement st;
         try {
             st = cn.createStatement();
@@ -338,7 +339,7 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
             jComboBox_cliente.removeAllItems();
             jComboBox_cliente.addItem("Seleccione cliente:");
             while (rs.next()) {
-                jComboBox_cliente.addItem(rs.getString("nombre") + " " + rs.getString("apellido"));
+                jComboBox_cliente.addItem(rs.getString("nombre") + " " + rs.getString("p_apellido"));
             }
             cn.close();
         } catch (SQLException e) {

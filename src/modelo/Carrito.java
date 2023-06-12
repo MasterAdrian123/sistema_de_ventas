@@ -9,42 +9,31 @@ package modelo;
  * @author Usuario
  */
 public class Carrito {
-    private int idCarrito;
-    private int idPedido;
+    private int idCliente;
     private double valorPagar;
     private String fechaVenta;
     private int estado;
     
     public Carrito(){
-        this.idCarrito = 0;
-        this.idPedido = 0;
+        this.idCliente = 0;
         this.valorPagar = 0.0;
         this.fechaVenta = "";
         this.estado = 0;
     }
     
-    public Carrito(int idCarrito, int idPedido, double valorPagar, String fechaVenta, int estado) {
-        this.idCarrito = idCarrito;
-        this.idPedido = idPedido;
+    public Carrito(int idCliente, double valorPagar, String fechaVenta, int estado) {
+        this.idCliente = idCliente;
         this.valorPagar = valorPagar;
         this.fechaVenta = fechaVenta;
         this.estado = estado;
     }
 
-    public int getIdCarrito() {
-        return idCarrito;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdCarrito(int idCarrito) {
-        this.idCarrito = idCarrito;
-    }
-
-    public int getIdPedido() {
-        return idPedido;
-    }
-
-    public void setIdPedido(int idPedido) {
-        this.idPedido = idPedido;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public double getValorPagar() {
@@ -73,6 +62,6 @@ public class Carrito {
     
     @Override
     public String toString() {
-        return "CabeceraVenta{" + "id carrito=" + idCarrito + ", idCliente=" + idPedido + ", valorPagar=" + valorPagar + ", fechaVenta=" + fechaVenta + ", estado=" + estado + '}';
+        return "CabeceraVenta{" + "id cliente=" + idCliente + ", valorPagar=" + valorPagar + ", fechaVenta=" + fechaVenta + ", estado=" + estado + '}';
     }
 }

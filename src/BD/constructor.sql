@@ -41,17 +41,16 @@ id int(3) primary key not null auto_increment, 	-- 1
 numero_tarjeta varchar (16), 					-- 2
 saldo float (8,2),								-- 3
 id_cliente int(3) not null,				-- 4
-estado varchar(8) default 'activo',				-- 5
-constraint foreign key FK_id_cliente (id_cliente) references cliente(id),
-constraint chk_estado check (estado IN ('activo', 'inactivo'))
+estado int(1) default 1,				-- 5
+constraint foreign key FK_id_cliente (id_cliente) references cliente(id)
 );
 
 insert into cuenta values
-(1,'101010',1200.98,1,'activo'),
-(2,'2020202',76000.00,2,'inactivo'),
-(3,'303030',189000.00,3,'activo'),
-(4,'404040',43799.00,3,'inactivo'),
-(5,'5050505',111222.22,4,'activo');
+(1,'101010',1200.98,1,1),
+(2,'2020202',76000.00,2,1),
+(3,'303030',189000.00,3,1),
+(4,'404040',43799.00,3,2),
+(5,'5050505',111222.22,4,2);
 
 create table categoria(
 id int(3) primary key auto_increment,
@@ -100,6 +99,24 @@ fecha date not null,
 estado int (1) not null
 );
 
+create table carrito(
+id int(3) primary key auto_increment,
+idCliente int (2) not null,
+constraint foreign key Fk_idCliente_carrito(idCliente) references cliente(id),
+fecha date not null,
+totalCompra double(10,2) not null,
+estado int(1) not null,
+cant int(5) not null
+);
+
+insert into carrito values (1,1,'2023-06-01',48000.00,1),
+(2,1,'2023-03-01',76000.00,1),
+(3,2,'2023-06-01',4000.00,1);
+
+
+ -- select max(id) from carrito where idCliente=1;
+ 
+ 
 create table pedido(
 id int(3) primary key auto_increment,
 idProducto int(5) not null,
@@ -112,33 +129,19 @@ subtotal double(10,2) not null,
 descuento double(8,2) not null,
 iva double(8,2) not null,
 totalProducto double(10,2) not null,
-estado int(1) not null -- 1 = por pagar ; 2= pagado
+estado int(1) not null,-- 1 = por pagar ; 2= pagado
+idCarrito int(3) not null,
+constraint foreign key fk_idCarrito_pedido(idCarrito) references carrito(id)
 );
-insert into pedido values (1,3,1,5,1500.00,4800.00,120.00,7,40000.00,2);
-insert into pedido values (2,3,1,5,1500.00,4800.00,120.00,7,40000.00,1);
-
--- drop table carrito;
-create table carrito(
-id int(3) primary key auto_increment,
-idCliente int(3),
-constraint foreign key FK_idCliente(idCliente) references cliente(id),
-idPedido int (3) not null,
-constraint foreign key(idPedido) references pedido(id),
-estado int(1) not null,
-fecha date not null,
-totalCompra double(10,2) not null
-);
+insert into pedido values (1 ,  3,  1,  5,  1500.00,  4800.00, 120.00,  7,  40000.00, 2, 1);
+insert into pedido values (2 ,  3,  1,  3,   500.00,   800.00, 120.00,  7,   8000.00, 1, 1);
 
 create table ventas(
 id int(3) primary key auto_increment,
 idCarrito int(3) not null,
 constraint foreign key Fk_idCarrito_ventas(idCarrito) references Carrito(id),
-idCliente int(3) not null,
-constraint foreign key Fk_idCliente_ventas(idCliente) references cliente(id),
-totalPagado double(10,2) not null,
-fecha date not null
+fecha date not null,
+idCuenta int(3) not null,
+constraint foreign key Fk_idCuenta_ventas(idCuenta) references cuenta(id)
 );
-select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento,p.iva,p.totalProducto FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto AND p.idCliente= 1;
--- select * from administrador;
--- select * from cliente;
--- select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento, p.iva, p.totalProducto, p.estado FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto
+insert into ventas values (1,1,'2023-6-05',1);

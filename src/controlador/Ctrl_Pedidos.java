@@ -29,7 +29,11 @@ public class Ctrl_Pedidos {
                     + "cantidad, "
                     + "precio,"
                     + "subtotal,"
-                    + "descuento,iva,totalProducto,estado) values(?,?,?,?,?,?,?,?,?)");
+                    + "descuento,"
+                    + "iva,"
+                    + "totalProducto,"
+                    + "estado,"
+                    + "idCarrito) values(?,?,?,?,?,?,?,?,?,?)");
             consulta.setInt(1, objeto.getIdProducto());//id
             consulta.setInt(2, objeto.getIdCliente());
             consulta.setInt(3, objeto.getCantidad());
@@ -39,6 +43,7 @@ public class Ctrl_Pedidos {
             consulta.setDouble(7, objeto.getIva());
             consulta.setDouble(8, objeto.getTotalPagar());
             consulta.setInt(9, objeto.getEstado());
+            consulta.setInt(10, objeto.getIdCarrito());
             
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
@@ -49,27 +54,6 @@ public class Ctrl_Pedidos {
         }
         return respuesta;
     }
-    public boolean insertarCarrito(Pedido pedido,int idPedido, String fecha, double total){
-        boolean respuesta = false;
-        try{
-            Connection cn = Conexion.conectar();
-            PreparedStatement consulta = cn.prepareStatement("INSERT INTO carrito (idCliente, idPedido, estado,fecha,totalCompra) VALUES(?,?,?,?,?)");
-            consulta.setInt(1, pedido.getIdCliente());
-            consulta.setInt(2,idPedido);
-            consulta.setInt(3, pedido.getEstado());
-            consulta.setString(4, fecha);
-            consulta.setDouble(5, total);
-            if (consulta.executeUpdate() > 0) {
-                respuesta = true;
-            }
-            cn.close();
-        }catch(SQLException e){
-            System.out.println("Error al guardar EN EL CARRITO: " + e);
-        }
-        
-        return respuesta;
-    }
-    
 //    public boolean guardarDetalle(Carrito objeto) {
 //        boolean respuesta = false;
 //        Connection cn = Conexion.conectar();

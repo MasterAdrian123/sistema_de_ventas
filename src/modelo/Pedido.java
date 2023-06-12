@@ -22,6 +22,7 @@ public class Pedido {
     private double iva;
     private double totalPagar;
     private int estado;
+    private int idCarrito;
 
     //Contructor
     public Pedido() {
@@ -35,11 +36,12 @@ public class Pedido {
         this.iva = 0.0;
         this.totalPagar = 0.0;
         this.estado = 0;
+        this.idCarrito =0;
     }
     
     //Contructor sobrebargado
 
-    public Pedido(int idCliente, int idProducto, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado) {
+    public Pedido(int idCliente, int idProducto, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado, int idCarrito) {
         //this.idPedido = idPedido;
         this.idCliente = idCliente;
         this.idProducto = idProducto;
@@ -50,6 +52,7 @@ public class Pedido {
         this.iva = iva;
         this.totalPagar = totalPagar;
         this.estado = estado;
+        this.idCarrito = idCarrito;
     }
     
     //get and set
@@ -68,6 +71,14 @@ public class Pedido {
 
     public void setIdCliente(int cliente) {
         this.idCliente = cliente;
+    }
+
+    public int getIdCarrito() {
+        return idCarrito;
+    }
+
+    public void setIdCarrito(int idCarrito) {
+        this.idCarrito = idCarrito;
     }
 
     public int getIdProducto() {
