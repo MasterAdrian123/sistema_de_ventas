@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import modelo.Categoria;
 
 public class InterCategoria extends javax.swing.JInternalFrame {
-
+    
     public InterCategoria() {
         initComponents();
         this.setSize(new Dimension(400, 200));

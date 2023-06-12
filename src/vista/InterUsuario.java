@@ -156,7 +156,7 @@ public class InterUsuario extends javax.swing.JInternalFrame {
             //validamos si el usuaro ya esta registrado
             Usuario usuario = new Usuario();
             Ctrl_Usuario controlUsuario = new Ctrl_Usuario();
-            if (!controlUsuario.existeUsuario(txt_cedula.getText().trim())) {
+            if (!controlUsuario.existeUsuario(txt_cedula.getText().trim(),this.Administrador.isSelected())) {
                 //enviamos datos del usuario
                 usuario.setNombre(txt_nombre.getText().trim());
                 usuario.setApellido(txt_apellido.getText().trim());

@@ -35,9 +35,9 @@ public class InterCliente extends javax.swing.JInternalFrame {
         txt_cedula = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
         jButton_Guardar = new javax.swing.JButton();
+        txt_password = new javax.swing.JPasswordField();
         txt_direccion = new javax.swing.JTextField();
         txt_password_visible = new javax.swing.JTextField();
-        txt_password = new javax.swing.JPasswordField();
         jLabel7 = new javax.swing.JLabel();
         jCheckBox_ver_clave = new javax.swing.JCheckBox();
         jLabel_wallpaper = new javax.swing.JLabel();
@@ -103,14 +103,14 @@ public class InterCliente extends javax.swing.JInternalFrame {
         });
         getContentPane().add(jButton_Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, 90, 30));
 
+        txt_password.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 170, -1));
+
         txt_direccion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(txt_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 170, -1));
 
         txt_password_visible.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(txt_password_visible, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 170, -1));
-
-        txt_password.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 170, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));

@@ -309,7 +309,7 @@ public class InterGestionarUsuario extends javax.swing.JInternalFrame {
         switch (opcion){
             case 1:
                 sql = "SELECT * FROM cliente";
-                columna  =8;
+                columna  = 8;
                 break;
             case 2:
                 sql = "SELECT * FROM administrador";
@@ -345,11 +345,10 @@ public class InterGestionarUsuario extends javax.swing.JInternalFrame {
                     break;
             }
             
-
             while (rs.next()) {
                 Object fila[] = new Object[columna];
                 for (int i = 0; i < columna; i++) {
-                    fila[i] = rs.getObject(i + 1);
+                        fila[i] = rs.getObject(i + 1);
                 }
                 model.addRow(fila);
             }
@@ -364,13 +363,7 @@ public class InterGestionarUsuario extends javax.swing.JInternalFrame {
                 int columna_point = 0;
 
                 if (fila_point > -1) {
-                    if(opcion==1){
-                        String var = (String) model.getValueAt(fila_point, columna_point);
-                        idUsuario = Integer.parseInt(var);
-                    }else{
-                        idUsuario = (int) model.getValueAt(fila_point, columna_point);
-                    }
-                    
+                    idUsuario = (int) model.getValueAt(fila_point, columna_point);
                     EnviarDatosUsuarioSeleccionado(idUsuario);//metodo
                 }
             }
@@ -384,15 +377,14 @@ public class InterGestionarUsuario extends javax.swing.JInternalFrame {
      * **************************************************
      */
     private void EnviarDatosUsuarioSeleccionado(int idUsuario) {
-        try {
-            Connection con = Conexion.conectar();
+        try( Connection con = Conexion.conectar()) {
             String sql="";
             switch(opcion){
                 case 1:
-                    sql = "select * from cliente where id= '" + idUsuario + "'";
+                    sql = "select * from cliente where id= " + idUsuario + ";";
                     break;
                 case 2:
-                    sql = "select * from administrador where id= '" + idUsuario+ "'";
+                    sql = "select * from administrador where id= " + idUsuario+ "";
                     break;
             }
             PreparedStatement pst = con.prepareStatement(sql);

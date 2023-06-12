@@ -163,7 +163,7 @@ public class InterActualizarStock extends javax.swing.JInternalFrame {
     private void CargarComboProductos() {
 
         Connection cn = Conexion.conectar();
-        String sql = "select * from tb_producto";
+        String sql = "select * from producto";
         Statement st;
         try {
 
@@ -186,14 +186,14 @@ public class InterActualizarStock extends javax.swing.JInternalFrame {
         try {
 
             Connection cn = Conexion.conectar();
-            String sql = "select * from tb_producto where nombre = '" + this.jComboBox_producto.getSelectedItem() + "'";
+            String sql = "select * from producto where nombre = '" + this.jComboBox_producto.getSelectedItem() + "'";
             Statement st;
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
             if (rs.next()) {
-                idProducto = rs.getInt("idProducto");
-                cantidad = rs.getInt("cantidad");
+                idProducto = rs.getInt("cod_producto");
+                cantidad = rs.getInt("stock");
                 txt_cantidad_actual.setText(String.valueOf(cantidad));
             } else {
                 txt_cantidad_actual.setText("");

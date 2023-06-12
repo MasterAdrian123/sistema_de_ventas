@@ -140,4 +140,23 @@ public class Ctrl_Producto {
         }
         return respuesta;
     }
+     
+     public int idProducto(String nombre){
+        int id=0;
+        String sql = "select cod_producto from producto where nombre = '" + nombre + "';";
+        Statement st;
+
+        try {
+            Connection cn = Conexion.conectar();
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                id = rs.getInt("cod_producto");
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error al consultar producto: " + e);
+        }
+         return id;
+     }
 }

@@ -5,9 +5,11 @@
 package controlador;
 
 import conexion.Conexion;
+import static controlador.Ctrl_RegistrarVenta.idCabeceraRegistrada;
 import java.sql.*;
 import java.util.ArrayList;
 import modelo.Carrito;
+import modelo.DetalleVenta;
 import modelo.Pedido;
 /**
  *
@@ -16,7 +18,6 @@ import modelo.Pedido;
 public class Ctrl_Pedidos {
     
     public static int idCabeceraRegistrada;
-    java.math.BigDecimal iDColVar;
     
     public boolean guardar(Pedido objeto) {
         boolean respuesta = false;
@@ -30,7 +31,7 @@ public class Ctrl_Pedidos {
                     + "subtotal,"
                     + "descuento,iva,totalProducto,estado) values(?,?,?,?,?,?,?,?,?)");
             consulta.setInt(1, objeto.getIdProducto());//id
-            consulta.setString(2, objeto.getIdCliente());
+            consulta.setInt(2, objeto.getIdCliente());
             consulta.setInt(3, objeto.getCantidad());
             consulta.setDouble(4, objeto.getPrecioUnitario());
             consulta.setDouble(5, objeto.getSubTotal());
@@ -48,14 +49,14 @@ public class Ctrl_Pedidos {
         }
         return respuesta;
     }
-    public boolean insertarCarrito(String idCliente, int idPedido, int estado, String fecha, double total){
+    public boolean insertarCarrito(Pedido pedido,int idPedido, String fecha, double total){
         boolean respuesta = false;
-        Connection cn = Conexion.conectar();
         try{
-            PreparedStatement consulta = cn.prepareStatement("INSERT INTO carrito VALUES(?,?,?,?,?)");
-            consulta.setString(1, idCliente);
+            Connection cn = Conexion.conectar();
+            PreparedStatement consulta = cn.prepareStatement("INSERT INTO carrito (idCliente, idPedido, estado,fecha,totalCompra) VALUES(?,?,?,?,?)");
+            consulta.setInt(1, pedido.getIdCliente());
             consulta.setInt(2,idPedido);
-            consulta.setInt(3, estado);
+            consulta.setInt(3, pedido.getEstado());
             consulta.setString(4, fecha);
             consulta.setDouble(5, total);
             if (consulta.executeUpdate() > 0) {
@@ -68,9 +69,37 @@ public class Ctrl_Pedidos {
         
         return respuesta;
     }
-    public int obtenerIdPedido(String cliente, double total, int producto){
+    
+//    public boolean guardarDetalle(Carrito objeto) {
+//        boolean respuesta = false;
+//        Connection cn = Conexion.conectar();
+//        try {
+//            PreparedStatement consulta = cn.prepareStatement("insert into ventas (idCarrito, idCliente,totalPagado,fecha) values(?,?,?,?)");
+//            consulta.setInt(1, idCabeceraRegistrada);
+//            consulta.setInt(2,);
+//            consulta.setInt(3, objeto.getCantidad());
+//            consulta.setDouble(4, objeto.getPrecioUnitario());
+//            
+//            if (consulta.executeUpdate() > 0) {
+//                respuesta = true;
+//            }
+//            cn.close();
+//        } catch (SQLException e) {
+//            System.out.println("Error al guardar detalle de venta: " + e);
+//        }
+//        return respuesta;
+//    }
+    
+    public int obtenerIdPedido(Pedido pedido){
         int id= 0;
-        String sql = "SELECT id FROM pedido WHERE idCliente = '" + cliente + "' AND totalProducto='" + total+ "' AND idProducto='" +producto+ "';";
+        String sql = "SELECT id FROM pedido "
+                + "WHERE idProducto= "+ pedido.getIdProducto() +" AND "
+                + "idCliente= '"+ pedido.getIdCliente() +"' "
+                + "AND cantidad= "+pedido.getCantidad() +" AND "
+                + "precio = "+ pedido.getPrecioUnitario()+" AND "
+                + "descuento= "+pedido.getDescuento()+" AND "
+                + "iva = "+pedido.getIva()+" AND "
+                + "estado = 1;";
         Statement st;
         try {
             Connection cn = Conexion.conectar();
@@ -79,6 +108,7 @@ public class Ctrl_Pedidos {
             while (rs.next()) {
                 id = rs.getInt("id");
             }
+            cn.close();
         } catch (SQLException e) {
             System.out.println("Error al consultar usuario: " + e);
         }

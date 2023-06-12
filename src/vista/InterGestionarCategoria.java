@@ -19,7 +19,16 @@ import modelo.Categoria;
 public class InterGestionarCategoria extends javax.swing.JInternalFrame {
 
     private int idCategoria;
+    private boolean Admin;
 
+    public boolean isAdmin() {
+        return Admin;
+    }
+
+    public void setAdmin(boolean Admin) {
+        this.Admin = Admin;
+    }
+    
     public InterGestionarCategoria() {
         initComponents();
         this.setSize(new Dimension(600, 400));
@@ -126,38 +135,46 @@ public class InterGestionarCategoria extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_actualizarActionPerformed
-        if (!txt_descripcion.getText().isEmpty()) {
-            Categoria categoria = new Categoria();
-            Ctrl_Categoria controlCategoria = new Ctrl_Categoria();
+        if(Admin){
+                if (!txt_descripcion.getText().isEmpty()) {
+                Categoria categoria = new Categoria();
+                Ctrl_Categoria controlCategoria = new Ctrl_Categoria();
 
-            categoria.setDescripcion(txt_descripcion.getText().trim());
-            if (controlCategoria.actualizar(categoria, idCategoria)) {
-                JOptionPane.showMessageDialog(null, "Categoria Actulizada");
-                txt_descripcion.setText("");
-                this.CargarTablaCategorias();
+                categoria.setDescripcion(txt_descripcion.getText().trim());
+                if (controlCategoria.actualizar(categoria, idCategoria)) {
+                    JOptionPane.showMessageDialog(null, "Categoria Actulizada");
+                    txt_descripcion.setText("");
+                    this.CargarTablaCategorias();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar Categoria");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al actualizar Categoria");
+                JOptionPane.showMessageDialog(null, "Seleccione una categoria");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
+        }else{
+            JOptionPane.showMessageDialog(null, "NO TIENE PERMISO PARA REALIZAR ESTA ACCION");
         }
     }//GEN-LAST:event_jButton_actualizarActionPerformed
 
     private void jButton_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eliminarActionPerformed
-        if (!txt_descripcion.getText().isEmpty()) {
-            Categoria categoria = new Categoria();
-            Ctrl_Categoria controlCategoria = new Ctrl_Categoria();
+        if(Admin){
+            if (!txt_descripcion.getText().isEmpty()) {
+                Categoria categoria = new Categoria();
+                Ctrl_Categoria controlCategoria = new Ctrl_Categoria();
 
-            categoria.setDescripcion(txt_descripcion.getText().trim());
-            if (!controlCategoria.eliminar(idCategoria)) {
-                JOptionPane.showMessageDialog(null, "Categoria Eliminada");
-                txt_descripcion.setText("");
-                this.CargarTablaCategorias();
+                categoria.setDescripcion(txt_descripcion.getText().trim());
+                if (!controlCategoria.eliminar(idCategoria)) {
+                    JOptionPane.showMessageDialog(null, "Categoria Eliminada");
+                    txt_descripcion.setText("");
+                    this.CargarTablaCategorias();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Eliminar Categoria");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al Eliminar Categoria");
+                JOptionPane.showMessageDialog(null, "Seleccione una categoria");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
+        }else{
+            JOptionPane.showMessageDialog(null, "NO TIENE PERMISO PARA REALIZAR ESTA ACCION");
         }
     }//GEN-LAST:event_jButton_eliminarActionPerformed
 
@@ -184,7 +201,7 @@ public class InterGestionarCategoria extends javax.swing.JInternalFrame {
     private void CargarTablaCategorias() {
         Connection con = Conexion.conectar();
         DefaultTableModel model = new DefaultTableModel();
-        String sql = "select idCategoria, descripcion, estado from tb_categoria";
+        String sql = "select * from categoria";
         Statement st;
         try {
             st = con.createStatement();
@@ -192,7 +209,7 @@ public class InterGestionarCategoria extends javax.swing.JInternalFrame {
             InterGestionarCategoria.jTable_categorias = new JTable(model);
             InterGestionarCategoria.jScrollPane1.setViewportView(InterGestionarCategoria.jTable_categorias);
 
-            model.addColumn("idCategoria");
+            model.addColumn("id");
             model.addColumn("descripcion");
             model.addColumn("estado");
 
@@ -232,12 +249,18 @@ public class InterGestionarCategoria extends javax.swing.JInternalFrame {
         try {
             Connection con = Conexion.conectar();
             PreparedStatement pst = con.prepareStatement(
-                    "select * from tb_categoria where idCategoria = '" + idCategoria + "'");
+                    "select * from categoria where id = '" + idCategoria + "'");
             ResultSet rs = pst.executeQuery();
+            if(!txt_descripcion.isEnabled()){
+                txt_descripcion.setEnabled(true);
+            }
             if (rs.next()) {
                 txt_descripcion.setText(rs.getString("descripcion"));
             }
             con.close();
+            if(!Admin){
+                txt_descripcion.setEnabled(false);
+            }
         } catch (SQLException e) {
             System.out.println("Error al seleccionar categoria: " + e);
         }

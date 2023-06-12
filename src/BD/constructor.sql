@@ -4,21 +4,21 @@ Create database MVC_POO;
 use MVC_POO;
 
 create table cliente (
-id varchar (20) primary key not null, 		-- 1
+id int(3) primary key auto_increment, 		-- 1
 nombre varchar (40) not null,  				-- 2
 p_apellido varchar (15)  not null, 			-- 3
-s_apellido varchar (15) not null,   		-- 4
+s_apellido varchar (15),   		-- 4
 direccion varchar (30) not null, 			-- 5
 telefono varchar (10) not null,  			-- 6
 clave varchar(20),			-- 7
 cedula varchar(12) not null unique			-- 8
 );
 
-insert into cliente values('1','n1','p1','p11','d1','t1','c1','cc1'),
-('2','n2','p2','p22','d2','t2','c2','cc2'),
-('3','n3','p3','p33','d3','t3','c3','cc3'),
-('4','n4','p4','p44','d4','t4','c4','cc4'),
-('5','n5','p5','p55','d5','t5','c5','cc5');
+insert into cliente values(1,'n1','p1','p11','d1','t1','c1','cc1'),
+(2,'n2','p2','p22','d2','t2222','c2','cc2'),
+(3,'n3','p3','p33','d3','t3','c3','cc3'),
+(4,'n4','p4','p44','d4','t4','c4','cc4'),
+(5,'n5','p5','p55','d5','t5','c5','cc5');
 
 create table administrador (
 id int(5) primary key not null auto_increment, 		-- 1
@@ -40,7 +40,7 @@ create table cuenta (
 id int(3) primary key not null auto_increment, 	-- 1
 numero_tarjeta varchar (16), 					-- 2
 saldo float (8,2),								-- 3
-id_cliente varchar(20) not null,				-- 4
+id_cliente int(3) not null,				-- 4
 estado varchar(8) default 'activo',				-- 5
 constraint foreign key FK_id_cliente (id_cliente) references cliente(id),
 constraint chk_estado check (estado IN ('activo', 'inactivo'))
@@ -93,8 +93,8 @@ insert into producto values
 
 create table cabecera(
 id int(3) primary key auto_increment,
-idCliente varchar(20) not null,
-constraint foreign key Fk_idCliente(idCliente) references cliente(id),
+idCliente int(3) not null,
+constraint foreign key Fk_idCliente_cabecera(idCliente) references cliente(id),
 valorPago double(8,2) not null,
 fecha date not null,
 estado int (1) not null
@@ -104,7 +104,7 @@ create table pedido(
 id int(3) primary key auto_increment,
 idProducto int(5) not null,
 constraint foreign key Fk_idProducto_detalle(idProducto) references producto(cod_producto),
-idCliente varchar(20) not null,
+idCliente int(3) not null,
 constraint foreign key Fk_idCliente(idCliente) references cliente(id),
 cantidad int (2) not null,
 precio double(8,2) not null,
@@ -112,14 +112,15 @@ subtotal double(10,2) not null,
 descuento double(8,2) not null,
 iva double(8,2) not null,
 totalProducto double(10,2) not null,
-estado int(1) not null
+estado int(1) not null -- 1 = por pagar ; 2= pagado
 );
-insert into pedido values (1,3,'1',5,1500.00,4800.00,120.00,7,40000.00,2);
-insert into pedido values (2,3,'1',5,1500.00,4800.00,120.00,7,40000.00,1);
+insert into pedido values (1,3,1,5,1500.00,4800.00,120.00,7,40000.00,2);
+insert into pedido values (2,3,1,5,1500.00,4800.00,120.00,7,40000.00,1);
 
-drop table carrito;
+-- drop table carrito;
 create table carrito(
-idCliente varchar(25),
+id int(3) primary key auto_increment,
+idCliente int(3),
 constraint foreign key FK_idCliente(idCliente) references cliente(id),
 idPedido int (3) not null,
 constraint foreign key(idPedido) references pedido(id),
@@ -127,6 +128,17 @@ estado int(1) not null,
 fecha date not null,
 totalCompra double(10,2) not null
 );
+
+create table ventas(
+id int(3) primary key auto_increment,
+idCarrito int(3) not null,
+constraint foreign key Fk_idCarrito_ventas(idCarrito) references Carrito(id),
+idCliente int(3) not null,
+constraint foreign key Fk_idCliente_ventas(idCliente) references cliente(id),
+totalPagado double(10,2) not null,
+fecha date not null
+);
+select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento,p.iva,p.totalProducto FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto AND p.idCliente= 1;
 -- select * from administrador;
 -- select * from cliente;
-select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento, p.iva, p.totalProducto, p.estado FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto
+-- select pr.nombre, p.cantidad, p.precio, p.subtotal, p.descuento, p.iva, p.totalProducto, p.estado FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto

@@ -275,6 +275,8 @@ public class FrmLogin extends javax.swing.JFrame {
                 //JOptionPane.showMessageDialog(null, "Login Correcto...");
                 FrmMenu menu = new FrmMenu();
                 menu.setCedulaUsuario(usuario.getCedula());
+                menu.setAdmin(Admin);
+                menu.setCedulaUsuario(usuario.getCedula());
                 menu.setVisible(true);
                 this.dispose();
             } else {

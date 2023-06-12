@@ -2,7 +2,8 @@ package vista;
 
 import conexion.Conexion;
 import controlador.Ctrl_Pedidos;
-import controlador.VentaPDF;
+//import controlador.VentaPDF;
+import controlador.Ctrl_Producto;
 import java.awt.Dimension;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.sql.Connection;
@@ -28,7 +29,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
     ArrayList<Pedido> listaProductos = new ArrayList<>();
     private Pedido producto;
 
-    private String idCliente = "";//id del cliente sleccionado
+    private int idCliente = 0;//id del cliente sleccionado
 
     private int idProducto = 0;
     private String nombre = "";
@@ -50,14 +51,13 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
     //fin de variables de calculos globales
 
     private int auxIdDetalle = 1;//id del detalle de venta
-
     public InterFacturacion() {
         initComponents();
         this.setSize(new Dimension(800, 600));
         this.setTitle("Facturacion");
 
         //Cargar lo Clientes en la vista - cargar productos
-        this.CargarComboClientes();
+        //this.CargarComboClientes();        
         this.CargarComboProductos();
 
         this.inicializarTablaProducto();
@@ -82,7 +82,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
         modeloDatosProductos = new DefaultTableModel();
         //añadir columnas
         modeloDatosProductos.addColumn("No. pedido");
-        modeloDatosProductos.addColumn("N");
+        //modeloDatosProductos.addColumn("N");
         modeloDatosProductos.addColumn("Nombre");
         modeloDatosProductos.addColumn("Cantidad");
         modeloDatosProductos.addColumn("P. Unitario");
@@ -97,35 +97,36 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
 
     //metodo para presentar la informacion de la tavla DetalleVenta
     private void listaTablaProductos() {
-        
-        this.modeloDatosProductos.setRowCount(listaProductos.size());
-        
+
+        //this.modeloDatosProductos.setRowCount(listaProductos.size());
+
         Connection con = Conexion.conectar();
         Statement st;
-        try{
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("select pr.nombre, "
+        String sql = "select pr.nombre, "
                     + "p.cantidad, "
                     + "p.precio, "
                     + "p.subtotal, "
                     + "p.descuento, "
                     + "p.iva, "
-                    + "p.totalProducto, "
-                    + "FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto AND p.idCliente='" + txt_cliente_buscar.getText() + "';");
+                    + "p.totalProducto "
+                    + "FROM pedido as p, producto as pr where p.idProducto=pr.cod_producto AND p.idCliente=" + idCliente + " AND p.estado=1;";
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
             int contadorPedido = 1;
             while (rs.next()) {
                 Object fila[] = new Object[9];
                 for (int i = 0; i < 9; i++) {
-                    if(i==0){
-                        fila[1] = contadorPedido;
-                        contadorPedido+=1;
-                    
-                    }else{
-                        if(i==8){
-                            
-                            fila[8]= "Eliminar";
-                            
-                        }else{
+                    if (i == 0) {
+                        fila[i] = contadorPedido;
+                        contadorPedido += 1;
+
+                    } else {
+                        if (i == 8) {
+
+                            fila[8] = "Eliminar";
+
+                        } else {
                             fila[i] = rs.getObject(i);
                         }
                     }
@@ -133,7 +134,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
                 this.modeloDatosProductos.addRow(fila);
             }
             con.close();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error al llenar la tabla PEDIDOS: " + e);
         }
         //añadir al Jtable
@@ -217,7 +218,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
         getContentPane().add(txt_cliente_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, 150, -1));
 
         txt_cantidad.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(txt_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 150, -1));
+        getContentPane().add(txt_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 60, -1));
 
         jButton_busca_cliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton_busca_cliente.setText("Buscar");
@@ -344,29 +345,34 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_busca_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_busca_clienteActionPerformed
-        String clienteBuscar = txt_cliente_buscar.getText().trim();
-        Connection cn = Conexion.conectar();
-        String sql = "select nombre, p_apellido from cliente where cedula = '" + clienteBuscar + "'";
-        Statement st;
-        try {
-            st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            if (rs.next()) {
-                jComboBox_cliente.setSelectedItem(rs.getString("nombre") + " " + rs.getString("apellido"));
-            } else {
-                jComboBox_cliente.setSelectedItem("Seleccione cliente:");
-                JOptionPane.showMessageDialog(null, "¡Cedula de cliente incorrecta o no encontrada!");
-            }
-            txt_cliente_buscar.setText("");
-            cn.close();
-        } catch (SQLException e) {
-            System.out.println("¡Error al buscar cliente!, " + e);
-        }
+//        if(!txt_cliente_buscar.isEnabled()){
+//            String clienteBuscar = jComboBox_cliente.getItemAt(WIDTH);
+//            Connection cn = Conexion.conectar();
+//            String sql = "select nombre, p_apellido from cliente where cedula = '" + clienteBuscar + "'";
+//            Statement st;
+//            try {
+//                st = cn.createStatement();
+//                ResultSet rs = st.executeQuery(sql);
+//
+//                if (rs.next()) {
+//                    jComboBox_cliente.setSelectedItem(rs.getString("nombre") + " " + rs.getString("apellido"));
+//                } else {
+//                    jComboBox_cliente.setSelectedItem("Seleccione cliente:");
+//                    JOptionPane.showMessageDialog(null, "¡Cedula de cliente incorrecta o no encontrada!");
+//                }
+//                txt_cliente_buscar.setText("");
+//                cn.close();
+//            } catch (SQLException e) {
+//                System.out.println("¡Error al buscar cliente!, " + e);
+//            }
+//        }else{
+            JOptionPane.showMessageDialog(null,"ya existe un cliente agregado");
+//        }
     }//GEN-LAST:event_jButton_busca_clienteActionPerformed
-    //int pedidosSimples = 0;
+
     private void jButton_añadir_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_añadir_productoActionPerformed
         Ctrl_Pedidos ctrlP = new Ctrl_Pedidos();
+        this.ObtenerIdCliente();
         String combo = this.jComboBox_producto.getSelectedItem().toString();
         //validar que seleccione un producto
         if (combo.equalsIgnoreCase("Seleccione producto:")) {
@@ -378,7 +384,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
                 boolean validacion = validar(txt_cantidad.getText());
                 if (validacion) {
                     //validar que la cantidad sea mayor a cero
-                    if (Integer.parseInt(txt_cantidad.getText()) > 0 && Integer.parseInt(txt_cantidad.getText()) <21) {
+                    if (Integer.parseInt(txt_cantidad.getText()) > 0 && Integer.parseInt(txt_cantidad.getText()) < 21) {
                         cantidad = Integer.parseInt(txt_cantidad.getText());
                         //ejecutar metodo para obtener datos del producto
                         this.DatosDelProducto();
@@ -395,8 +401,8 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
                             totalPagar = (double) Math.round(totalPagar * 100) / 100;
 
                             //se crea un nuevo producto
-                            producto = new Pedido(auxIdDetalle,//idDetalleVenta
-                                    txt_cliente_buscar.getText(), //idCabecera
+                            producto = new Pedido(
+                                    idCliente, //idCabecera
                                     idProducto,
                                     Integer.parseInt(txt_cantidad.getText()),
                                     precioUnitario,
@@ -404,20 +410,21 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
                                     descuento,
                                     iva,
                                     totalPagar,
-                                    1//estado
+                                    1//estado por PAGAR // 2 = PAGADO
                             );
                             //añadir a la lista
-                            if(ctrlP.guardar(producto)){
-                               listaProductos.add(producto);
+                            if (ctrlP.guardar(producto)) {
+                                //listaProductos.add(producto);
                                 JOptionPane.showMessageDialog(null, "Producto Agregado");
                                 auxIdDetalle++;
                                 txt_cantidad.setText("");//limpiar el campo
-                            //volver a cargar combo productos
+                                //volver a cargar combo productos
                                 this.CargarComboProductos();
+                                this.cargarListaProductos();
                                 this.CalcularTotalPagar();
                                 txt_efectivo.setEnabled(true);
                                 jButton_calcular_cambio.setEnabled(true);
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "No se pudo agregar a Pedido");
                             }
 
@@ -438,6 +445,42 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
         this.listaTablaProductos();
     }//GEN-LAST:event_jButton_añadir_productoActionPerformed
 
+    private void cargarListaProductos(){
+        Connection con = Conexion.conectar();
+        Statement st;
+        String sql = " select p.idProducto, "
+                + "p.cantidad, "
+                + "p.precio, "
+                + "p.subtotal, "
+                + "p.descuento, "
+                + "p.iva, "
+                + "p.totalProducto, "
+                + "p.estado from pedido as p, cliente as c "
+                + "where p.idCliente = "+ idCliente +" AND p.estado = 1;";
+            try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            //int contadorPedido = 1;
+            Pedido consulta = new Pedido();
+            consulta.setIdCliente(idCliente);
+            while (rs.next()) {
+                consulta.setIdProducto(rs.getInt("idProducto"));
+                consulta.setCantidad(rs.getInt("cantidad"));
+                consulta.setPrecioUnitario(rs.getInt("precio"));
+                consulta.setDescuento(rs.getInt("descuento"));
+                consulta.setIva(rs.getInt("iva"));
+                consulta.setTotalPagar(rs.getInt("totalProducto"));
+                consulta.setEstado(rs.getInt("estado"));
+                consulta.setSubTotal(rs.getInt("subtotal"));
+                
+                listaProductos.add(consulta);
+            }
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Error al llenar la tabla PEDIDOS: " + e);
+        }
+    }
+    
     private void jButton_calcular_cambioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_calcular_cambioActionPerformed
         if (!txt_efectivo.getText().isEmpty()) {
             //validamos que el usuario no ingrese otros caracteres no numericos 
@@ -483,11 +526,16 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
                 break;
         }
     }//GEN-LAST:event_jTable_productosMouseClicked
-    
-    private int extraerIdPedido(double total, int prod){
+
+    private int extraerIdPedido(Pedido pedido) {
         int resultado = 0;
-        Ctrl_Pedidos pedido = new Ctrl_Pedidos();
-        pedido.obtenerIdPedido(idCliente,total,prod);
+        Ctrl_Pedidos ctrl = new Ctrl_Pedidos();
+        int validar = ctrl.obtenerIdPedido(pedido);
+        if (validar == 0) {
+            JOptionPane.showMessageDialog(null, "ID de PEDIDO ES 0");
+        } else {
+            resultado = validar;
+        }
         return resultado;
     }
     private void jButton_RegistrarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RegistrarVentaActionPerformed
@@ -502,72 +550,62 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
 
         if (!jComboBox_cliente.getSelectedItem().equals("Seleccione cliente:")) {
             if (listaProductos.size() > 0) {
+                
+                for (int i = 0; i < listaProductos.size(); i++) {
 
-                //metodo para obtener el id del cliente
-                this.ObtenerIdCliente();
-                //registrar cabecera
-                //carro.setIdCarrito(0);
-                for (int i = 0; i < listaProductos.size(); i++) {       
-                    double total = listaProductos.get(i).getTotalPagar();
-                    int prod = listaProductos.get(i).getIdProducto();
-                    
-                    if(controlPedido.insertarCarrito(idCliente,extraerIdPedido(total,prod),1,fechaActual,total)){
-                        JOptionPane.showMessageDialog(null,"yiiiiijaaa");
-                    }else{
-                        JOptionPane.showMessageDialog(null,"error al agregar al carrito");
-                    };                    
-                }
-//                carro.setIdPedido(idCliente);
-//                cabeceraVenta.setValorPagar(Double.parseDouble(txt_total_pagar.getText()));
-//                cabeceraVenta.setFechaVenta(fechaActual);
-//                cabeceraVenta.setEstado(1);
+                    Pedido ped = listaProductos.get(i);
+                    int pedidoId = extraerIdPedido(ped);
+                    double pago = ped.getTotalPagar();
 
-                if (controlVenta.guardar(cabeceraVenta)) {
-                    JOptionPane.showMessageDialog(null, "¡Venta Registrada!");
-                    
-                    //Generar la factura de venta
-                    VentaPDF pdf = new VentaPDF();
-                    pdf.DatosCliente(idCliente);
-                    pdf.generarFacturaPDF();
+                    if (controlPedido.insertarCarrito(ped, pedidoId, fechaActual, pago)) {
+                        JOptionPane.showMessageDialog(null, "yiiiiijaaa");
+//                        VentaPDF pdf = new VentaPDF();
+//                        pdf.DatosCliente(idCliente);
+//                        pdf.generarFacturaPDF();
+                        txt_subtotal.setText("0.0");
+                        txt_iva.setText("0.0");
+                        txt_descuento.setText("0.0");
+                        txt_total_pagar.setText("0.0");
+                        txt_efectivo.setText("");
+                        txt_cambio.setText("0.0");
+                        auxIdDetalle = 1;
 
-                    //guardar detalle
-                    for (DetalleVenta elemento : listaProductos) {
-                        detalleVenta.setIdDetalleVenta(0);
-                        detalleVenta.setIdCabeceraVenta(0);
-                        detalleVenta.setIdProducto(elemento.getIdProducto());
-                        detalleVenta.setCantidad(elemento.getCantidad());
-                        detalleVenta.setPrecioUnitario(elemento.getPrecioUnitario());
-                        detalleVenta.setSubTotal(elemento.getSubTotal());
-                        detalleVenta.setDescuento(elemento.getDescuento());
-                        detalleVenta.setIva(elemento.getIva());
-                        detalleVenta.setTotalPagar(elemento.getTotalPagar());
-                        detalleVenta.setEstado(1);
-
-                        if (controlVenta.guardarDetalle(detalleVenta)) {
-                            //System.out.println("Detalle de Venta Registrado");
-
-                            txt_subtotal.setText("0.0");
-                            txt_iva.setText("0.0");
-                            txt_descuento.setText("0.0");
-                            txt_total_pagar.setText("0.0");
-                            txt_efectivo.setText("");
-                            txt_cambio.setText("0.0");
-                            auxIdDetalle = 1;
-
-                            this.CargarComboClientes();
-                            this.RestarStockProductos(elemento.getIdProducto(), elemento.getCantidad());
-
-                        } else {
-                            JOptionPane.showMessageDialog(null, "¡Error al guardar detalle de venta!");
-                        }
+                        this.CargarComboClientes(txt_cliente_buscar.getText());
+                        this.RestarStockProductos(ped.getIdProducto(), ped.getCantidad());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "error al agregar al carrito");
                     }
-                    //vaciamos la lista
-                    listaProductos.clear();
-                    listaTablaProductos();
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "¡Error al guardar cabecera de venta!");
                 }
+                listaProductos.clear();
+                listaTablaProductos();
+
+//                if (controlVenta.guardar(cabeceraVenta)) {
+//                    JOptionPane.showMessageDialog(null, "¡Venta Registrada!");
+//                    
+//                    //Generar la factura de venta
+//
+//                    //guardar detalle
+//                    for (DetalleVenta elemento : listaProductos) {
+//                        detalleVenta.setIdDetalleVenta(0);
+//                        detalleVenta.setIdCabeceraVenta(0);
+//                        detalleVenta.setIdProducto(elemento.getIdProducto());
+//                        detalleVenta.setCantidad(elemento.getCantidad());
+//                        detalleVenta.setPrecioUnitario(elemento.getPrecioUnitario());
+//                        detalleVenta.setSubTotal(elemento.getSubTotal());
+//                        detalleVenta.setDescuento(elemento.getDescuento());
+//                        detalleVenta.setIva(elemento.getIva());
+//                        detalleVenta.setTotalPagar(elemento.getTotalPagar());
+//                        detalleVenta.setEstado(1);
+//                        if (controlVenta.guardarDetalle(detalleVenta)) {
+                //System.out.println("Detalle de Venta Registrado");
+//                        } else {
+//                            JOptionPane.showMessageDialog(null, "¡Error al guardar detalle de venta!");
+//                        }
+                //      }
+                //vaciamos la lista
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "¡Error al guardar cabecera de venta!");
+//                }
             } else {
                 JOptionPane.showMessageDialog(null, "¡Seleccione un producto!");
             }
@@ -614,18 +652,21 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
     /*
     Metodo para cargar los clientes en el jComboBox
      */
-    private void CargarComboClientes() {
+    public void CargarComboClientes(String cedula) {
         Connection cn = Conexion.conectar();
-        String sql = "select * from cliente";
+        String sql = "select * from cliente WHERE cedula='"+ cedula +"'";
         Statement st;
         try {
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             jComboBox_cliente.removeAllItems();
-            jComboBox_cliente.addItem("Seleccione cliente:");
+            //jComboBox_cliente.addItem("Seleccione cliente:");
             while (rs.next()) {
                 jComboBox_cliente.addItem(rs.getString("nombre") + " " + rs.getString("p_apellido"));
+                jComboBox_cliente.addItem(rs.getString("cedula"));
             }
+            txt_cliente_buscar.setText((String) jComboBox_cliente.getItemAt(1));
+            jComboBox_cliente.setEnabled(false);
             cn.close();
         } catch (SQLException e) {
             System.out.println("¡Error al cargar clientes, !" + e);
@@ -733,7 +774,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
         ivaGeneral = 0;
         totalPagarGeneral = 0;
 
-        for (DetalleVenta elemento : listaProductos) {
+        for (Pedido elemento : listaProductos) {
             subtotalGeneral += elemento.getSubTotal();
             descuentoGeneral += elemento.getDescuento();
             ivaGeneral += elemento.getIva();
@@ -763,7 +804,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                idCliente = String.valueOf(rs.getInt("id"));
+                idCliente = rs.getInt("id");
             }
 
         } catch (SQLException e) {
@@ -776,7 +817,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
         int cantidadProductosBaseDeDatos = 0;
         try {
             Connection cn = Conexion.conectar();
-            String sql = "select cod_roducto, stock from producto where cod_producto = '" + idProducto + "'";
+            String sql = "select stock from producto where cod_producto = '" + idProducto + "'";
             Statement st;
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -793,9 +834,7 @@ public class InterFacturacion extends javax.swing.JInternalFrame {
             PreparedStatement consulta = cn.prepareStatement("update producto set stock=? where cod_producto = '" + idProducto + "'");
             int cantidadNueva = cantidadProductosBaseDeDatos - cantidad;
             consulta.setInt(1, cantidadNueva);
-            if(consulta.executeUpdate() > 0){
-                //System.out.println("Todo bien");
-            }
+            consulta.executeUpdate();
             cn.close();
         } catch (SQLException e) {
             System.out.println("Error al restar cantidad 2, " + e);

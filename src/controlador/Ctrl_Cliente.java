@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import modelo.Cliente;
 
-
 public class Ctrl_Cliente {
 
     /**
@@ -18,16 +17,21 @@ public class Ctrl_Cliente {
      */
     public boolean guardar(Cliente objeto) {
         boolean respuesta = false;
+
+        String sql = "";
+
         Connection cn = Conexion.conectar();
         try {
-            PreparedStatement consulta = cn.prepareStatement("insert into cliente(nombre, P_apellido, direccion, telefono, cedula, clave) values(?,?,?,?,?,?)");
+            sql = "INSERT INTO cliente(nombre,p_apellido,cedula,telefono,direccion,clave) VALUES(?,?,?,?,?,?)";
+            PreparedStatement consulta = cn.prepareStatement(sql);
             //consulta.setInt(1, 0);//id
             consulta.setString(1, objeto.getNombre());
             consulta.setString(2, objeto.getApellido());
-            consulta.setString(3, objeto.getDireccion());
+            consulta.setString(3, objeto.getCedula());
             consulta.setString(4, objeto.getTelefono());
-            consulta.setString(5, objeto.getCedula());
+            consulta.setString(5, objeto.getDireccion());
             consulta.setString(6, objeto.getContraseña());
+
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
             }

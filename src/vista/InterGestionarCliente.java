@@ -262,7 +262,7 @@ public class InterGestionarCliente extends javax.swing.JInternalFrame {
     private void CargarTablaClientes() {
         Connection con = Conexion.conectar();
         DefaultTableModel model = new DefaultTableModel();
-        String sql = "select * from tb_cliente";
+        String sql = "select * from cliente";
         Statement st;
         try {
             st = con.createStatement();

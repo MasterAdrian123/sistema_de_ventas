@@ -17,24 +17,24 @@ public class Ctrl_Usuario {
     public boolean guardar(Usuario objeto, boolean tipo) {
         boolean respuesta = false;
         
-        String sql = "";
+        String sql;
         
         Connection cn = Conexion.conectar();
         try {
             if(tipo){
                 sql ="INSERT INTO administrador(nombre,apellido,cedula,telefono,direccion,clave) VALUES(?,?,?,?,?,?)";
             }else{
-                sql ="INSERT INTO cliente(nombre,p_apellido,cedula,telefono,direccion,clave) VALUES(?,?,?,?,?,?)";
+                sql ="INSERT INTO cliente(nombre, p_apellido,cedula, telefono, direccion,clave ) VALUES(?,?,?,?,?,?)";
             }
                 PreparedStatement consulta = cn.prepareStatement(sql);
-            //consulta.setInt(1, 0);//id
-            consulta.setString(1, objeto.getNombre());
-            consulta.setString(2, objeto.getApellido());
-            consulta.setString(3, objeto.getCedula());
-            consulta.setString(4, objeto.getTelefono());
-            consulta.setString(5, objeto.getDireccion());
-            consulta.setString(6, objeto.getContraseña());
-            
+                
+                consulta.setString(1, objeto.getNombre());
+                consulta.setString(2, objeto.getApellido());
+                consulta.setString(3, objeto.getCedula());
+                consulta.setString(4, objeto.getTelefono());
+                consulta.setString(5, objeto.getDireccion());
+                consulta.setString(6, objeto.getContraseña());
+                
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
             }
@@ -50,9 +50,14 @@ public class Ctrl_Usuario {
      * metodo para consultar si el producto ya esta registrado en la BBDD
      * ********************************************************************
      */
-    public boolean existeUsuario(String cedula) {
+    public boolean existeUsuario(String cedula, boolean tipo) {
         boolean respuesta = false;
-        String sql = "SELECT id FROM Usuario WHERE cedula = '" + cedula + "';";
+        String sql= "";
+        if (tipo){
+            sql = "SELECT id FROM administrador WHERE cedula = '" + cedula + "';";
+        }else{
+            sql = "SELECT id FROM cliente WHERE cedula = '" + cedula + "';";
+        }
         Statement st;
         try {
             Connection cn = Conexion.conectar();

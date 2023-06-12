@@ -3,13 +3,22 @@ package vista;
 import controlador.Reportes;
 import java.awt.*;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 
 public class FrmMenu extends javax.swing.JFrame {
     public boolean Admin;
     public static JDesktopPane jDesktopPane_menu;
     public String cedulaUsuario;
+
+    public boolean isAdmin() {
+        return Admin;
+    }
+
+    public void setAdmin(boolean Admin) {
+        this.Admin = Admin;
+    }
+    
     public FrmMenu() {
-        Admin = false;
         initComponents();
         this.setSize(new Dimension(1200, 700));
         this.setExtendedState(this.MAXIMIZED_BOTH);
@@ -82,6 +91,11 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu1.setText("Usuario");
         jMenu1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jMenu1.setPreferredSize(new java.awt.Dimension(150, 50));
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
 
         jMenuItem_nuevo_usuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jMenuItem_nuevo_usuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/nuevo-cliente.png"))); // NOI18N
@@ -236,6 +250,11 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu6.setText("Reportes");
         jMenu6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jMenu6.setPreferredSize(new java.awt.Dimension(150, 50));
+        jMenu6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu6MouseClicked(evt);
+            }
+        });
 
         jMenuItem_reportes_clientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jMenuItem_reportes_clientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reporte1.png"))); // NOI18N
@@ -287,6 +306,11 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu7.setText("Historial");
         jMenu7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jMenu7.setPreferredSize(new java.awt.Dimension(150, 50));
+        jMenu7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu7MouseClicked(evt);
+            }
+        });
 
         jMenuItem_ver_historial.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jMenuItem_ver_historial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/historial1.png"))); // NOI18N
@@ -330,25 +354,36 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_reportes_ventasActionPerformed
 
     private void jMenuItem_nueva_categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nueva_categoriaActionPerformed
-        InterCategoria interCategoria = new InterCategoria();
-        jDesktopPane_menu.add(interCategoria);
-        interCategoria.setVisible(true);
+        
+        if(Admin){
+            InterCategoria interCategoria = new InterCategoria();
+            interCategoria.setVisible(true);
+            jDesktopPane_menu.add(interCategoria);
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem_nueva_categoriaActionPerformed
 
     private void jMenuItem_gestionar_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_gestionar_categoriasActionPerformed
         InterGestionarCategoria interGestionarCategoria = new InterGestionarCategoria();
+        interGestionarCategoria.setAdmin(Admin);
         jDesktopPane_menu.add(interGestionarCategoria);
         interGestionarCategoria.setVisible(true);
     }//GEN-LAST:event_jMenuItem_gestionar_categoriasActionPerformed
 
     private void jMenuItem3_nuevo_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3_nuevo_productoActionPerformed
-        InterProducto interProducto = new InterProducto();
-        jDesktopPane_menu.add(interProducto);
-        interProducto.setVisible(true);
+        if(Admin){
+            InterProducto interProducto = new InterProducto();
+            jDesktopPane_menu.add(interProducto);
+            interProducto.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES UN ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem3_nuevo_productoActionPerformed
 
     private void jMenuItem_gestionar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_gestionar_productoActionPerformed
         InterGestionarProducto interGestionarProducto = new InterGestionarProducto();
+        interGestionarProducto.setAdmin(Admin);
         jDesktopPane_menu.add(interGestionarProducto);
         interGestionarProducto.setVisible(true);
     }//GEN-LAST:event_jMenuItem_gestionar_productoActionPerformed
@@ -360,9 +395,13 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_nuevo_clienteActionPerformed
 
     private void jMenuItem_actualizar_stockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_actualizar_stockActionPerformed
-        InterActualizarStock interActualizarStock = new InterActualizarStock();
-        jDesktopPane_menu.add(interActualizarStock);
-        interActualizarStock.setVisible(true);
+        if(Admin){
+            InterActualizarStock interActualizarStock = new InterActualizarStock();
+            jDesktopPane_menu.add(interActualizarStock);
+            interActualizarStock.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES UN ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem_actualizar_stockActionPerformed
 
     private void jMenuItem_cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_cerrar_sesionActionPerformed
@@ -374,26 +413,38 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_cerrar_sesionActionPerformed
 
     private void jMenuItem_nuevo_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nuevo_usuarioActionPerformed
-        InterUsuario interUsuario = new InterUsuario();
-        interUsuario.getAdministrador().setSelected(true);
-        jDesktopPane_menu.add(interUsuario);
-        interUsuario.setVisible(true);
+        if(Admin){
+            InterUsuario interUsuario = new InterUsuario();
+            interUsuario.getAdministrador().setSelected(true);
+            jDesktopPane_menu.add(interUsuario);
+            interUsuario.setVisible(true);   
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES UN ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem_nuevo_usuarioActionPerformed
 
     private void jMenuItem_gestionar_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_gestionar_clientesActionPerformed
-        InterGestionarUsuario interGestionarUsuario = new InterGestionarUsuario();
-        interGestionarUsuario.setOpcion(1);
-        interGestionarUsuario.CargarTablaUsuarios();
-        jDesktopPane_menu.add(interGestionarUsuario);
-        interGestionarUsuario.setVisible(true);
+        if(Admin){
+            InterGestionarUsuario interGestionarUsuario = new InterGestionarUsuario();
+            interGestionarUsuario.setOpcion(1);
+            interGestionarUsuario.CargarTablaUsuarios();
+            jDesktopPane_menu.add(interGestionarUsuario);
+            interGestionarUsuario.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES UN ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem_gestionar_clientesActionPerformed
 
     private void jMenuItem_nueva_ventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nueva_ventaActionPerformed
-        InterFacturacion interFacturacion = new InterFacturacion();
-        interFacturacion.txt_cliente_buscar.setText(cedulaUsuario);
-        interFacturacion.txt_cliente_buscar.disable();
-        jDesktopPane_menu.add(interFacturacion);
-        interFacturacion.setVisible(true);
+        if(Admin){
+            JOptionPane.showMessageDialog(null, "LO SIENTO ADMIN, SOLO EL CLIENTE PUEDE COMPRAR");
+        }else{
+            InterFacturacion interFacturacion = new InterFacturacion();
+            interFacturacion.CargarComboClientes(cedulaUsuario);
+            interFacturacion.txt_cliente_buscar.disable();
+            jDesktopPane_menu.add(interFacturacion);
+            interFacturacion.setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItem_nueva_ventaActionPerformed
 
     private void jMenuItem_gestionar_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_gestionar_ventasActionPerformed
@@ -424,12 +475,34 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_ver_historialActionPerformed
 
     private void jMenuItem_Gestionar_adminsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_Gestionar_adminsActionPerformed
-        InterGestionarUsuario interGestionarUsuario = new InterGestionarUsuario();
-        interGestionarUsuario.setOpcion(2);
-        interGestionarUsuario.CargarTablaUsuarios();
-        jDesktopPane_menu.add(interGestionarUsuario);
-        interGestionarUsuario.setVisible(true);
+        if(Admin){
+            InterGestionarUsuario interGestionarUsuario = new InterGestionarUsuario();
+            interGestionarUsuario.setOpcion(2);
+            interGestionarUsuario.CargarTablaUsuarios();
+            jDesktopPane_menu.add(interGestionarUsuario);
+            interGestionarUsuario.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null,"USTED NO ES UN ADMIN");
+        }
     }//GEN-LAST:event_jMenuItem_Gestionar_adminsActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        if(!Admin){
+            JOptionPane.showMessageDialog(null,"PARA SEGUIR TIENE QUE SER ADMIN");
+        }
+    }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
+        if(!Admin){
+            JOptionPane.showMessageDialog(null,"PARA SEGUIR TIENE QUE SER ADMIN");
+        }
+    }//GEN-LAST:event_jMenu6MouseClicked
+
+    private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
+       if(!Admin){
+            JOptionPane.showMessageDialog(null,"PARA SEGUIR TIENE QUE SER ADMIN");
+        }
+    }//GEN-LAST:event_jMenu7MouseClicked
 
     /**
      * @param args the command line arguments

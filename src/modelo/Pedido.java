@@ -11,7 +11,7 @@ package modelo;
 public class Pedido {
     //Atributos
     //private int idPedido;
-    private String idCliente;
+    private int idCliente;
     private int idProducto;
     
     //detalles del producto
@@ -26,7 +26,7 @@ public class Pedido {
     //Contructor
     public Pedido() {
         //this.idPedido = 0;
-        this.idCliente = "";
+        this.idCliente = 0;
         this.idProducto = 0;
         this.cantidad = 0;
         this.precioUnitario = 0.0;
@@ -39,7 +39,7 @@ public class Pedido {
     
     //Contructor sobrebargado
 
-    public Pedido(int idPedido, String idCliente, int idProducto, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado) {
+    public Pedido(int idCliente, int idProducto, int cantidad, double precioUnitario, double subTotal, double descuento, double iva, double totalPagar, int estado) {
         //this.idPedido = idPedido;
         this.idCliente = idCliente;
         this.idProducto = idProducto;
@@ -62,11 +62,11 @@ public class Pedido {
 //        this.idPedido = pedido;
 //    }
 
-    public String getIdCliente() {
+    public int getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCabeceraVenta(String cliente) {
+    public void setIdCliente(int cliente) {
         this.idCliente = cliente;
     }
 
