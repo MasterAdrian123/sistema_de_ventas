@@ -115,4 +115,20 @@ public class Ctrl_Cliente {
         return respuesta;
     }
 
+    public int idCliente(String cedula) {
+        int id = 0;
+        String sql = "select id from cliente where cedula = '" + cedula + "';";
+        Statement st;
+        try {
+            Connection cn = Conexion.conectar();
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al consultar cliente: " + e);
+        }
+        return id;
+    }
 }

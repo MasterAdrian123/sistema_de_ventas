@@ -70,6 +70,7 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jMenuItem_nueva_venta = new javax.swing.JMenuItem();
         jMenuItem_gestionar_ventas = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem_reportes_clientes = new javax.swing.JMenuItem();
         jMenuItem_reportes_categorias = new javax.swing.JMenuItem();
@@ -243,6 +244,14 @@ public class FrmMenu extends javax.swing.JFrame {
             }
         });
         jMenu5.add(jMenuItem_gestionar_ventas);
+
+        jMenuItem1.setText("Agregar Cuenta");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem1);
 
         jMenuBar1.add(jMenu5);
 
@@ -449,6 +458,9 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void jMenuItem_gestionar_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_gestionar_ventasActionPerformed
         InterGestionarVentas interGestionarVentas = new InterGestionarVentas();
+        interGestionarVentas.setCedulaUsuario(cedulaUsuario);
+        interGestionarVentas.CargarComboClientes();
+        interGestionarVentas.CargarTablaVentas();
         jDesktopPane_menu.add(interGestionarVentas);
         interGestionarVentas.setVisible(true);
     }//GEN-LAST:event_jMenuItem_gestionar_ventasActionPerformed
@@ -504,6 +516,13 @@ public class FrmMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenu7MouseClicked
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        InterCuentaNueva Cn = new InterCuentaNueva();
+        Cn.setCedulaCliente(cedulaUsuario);
+        jDesktopPane_menu.add(Cn);
+        Cn.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -549,6 +568,7 @@ public class FrmMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem3_nuevo_producto;
     private javax.swing.JMenuItem jMenuItem4;

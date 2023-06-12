@@ -39,7 +39,7 @@ insert into administrador (nombre,apellido,direccion,telefono,clave,cedula) valu
 create table cuenta (
 id int(3) primary key not null auto_increment, 	-- 1
 numero_tarjeta varchar (16), 					-- 2
-saldo float (8,2),								-- 3
+saldo double (8,2),								-- 3
 id_cliente int(3) not null,				-- 4
 estado int(1) default 1,				-- 5
 constraint foreign key FK_id_cliente (id_cliente) references cliente(id)
@@ -109,9 +109,9 @@ estado int(1) not null,
 cant int(5) not null
 );
 
-insert into carrito values (1,1,'2023-06-01',48000.00,1),
-(2,1,'2023-03-01',76000.00,1),
-(3,2,'2023-06-01',4000.00,1);
+insert into carrito values (1,1,'2023-06-01',48000.00,1,3),
+(2,1,'2023-03-01',76000.00,2,3),
+(3,2,'2023-06-01',4000.00,1,3);
 
 
  -- select max(id) from carrito where idCliente=1;
@@ -145,3 +145,6 @@ idCuenta int(3) not null,
 constraint foreign key Fk_idCuenta_ventas(idCuenta) references cuenta(id)
 );
 insert into ventas values (1,1,'2023-6-05',1);
+
+-- select max(id) from carrito where idCliente= 1;
+select c.id, c.idCliente, c.totalCompra, c.fecha, c.estado  from carrito as c, cliente as cl where  c.id = 1 and c.idCliente =1 limit 1;

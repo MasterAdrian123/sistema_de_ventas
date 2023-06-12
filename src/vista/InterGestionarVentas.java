@@ -1,6 +1,7 @@
 package vista;
 
 import conexion.Conexion;
+import controlador.Ctrl_Carrito;
 import controlador.Ctrl_RegistrarVenta;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -16,19 +17,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.CabeceraVenta;
+import static vista.InterFacturacion.jTable_productos;
 
 public class InterGestionarVentas extends javax.swing.JInternalFrame {
-
+    private int idArrayList;
     private int idCliente = 0;
     private int idVenta;
-
+    
+    private String cedulaUsuario;
+    private String nombreUsuario;
+    private String apellidoUsuario;
+    private String direccionUsuario;
+    
+    DefaultTableModel ModelDefault;
     public InterGestionarVentas() {
         initComponents();
         this.setSize(new Dimension(900, 500));
         this.setTitle("Gestionar Ventas");
         //Cargar tabla
-        this.CargarComboClientes();
-        this.CargarTablaVentas();
+        //this.CargarComboClientes();
+        //this.CargarTablaVentas();
 
         //insertar imagen en nuestro JLabel
         ImageIcon wallpaper = new ImageIcon("src/img/fondo3.jpg");
@@ -38,6 +46,14 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
 
     }
 
+    public String getCedulaUsuario() {
+        return cedulaUsuario;
+    }
+
+    public void setCedulaUsuario(String cedulaUsuario) {
+        this.cedulaUsuario = cedulaUsuario;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,6 +69,7 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
         jTable_ventas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jButton_actualizar = new javax.swing.JButton();
+        btn_comprar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txt_total_pagar = new javax.swing.JTextField();
@@ -75,6 +92,11 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+        });
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable_ventas.setModel(new javax.swing.table.DefaultTableModel(
@@ -88,6 +110,11 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable_ventas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_ventasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_ventas);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 710, 250));
@@ -107,6 +134,14 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton_actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        btn_comprar.setText("COMPRAR");
+        btn_comprar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_comprarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_comprar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 50, 130, 270));
 
@@ -200,8 +235,47 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButton_actualizarActionPerformed
 
+    private void jTable_ventasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_ventasMouseClicked
+        int fila_point = jTable_ventas.rowAtPoint(evt.getPoint());
+        int columna_point = 0;
+        Ctrl_Carrito Cc = new Ctrl_Carrito();
+        
+        if (fila_point > -1) {
+            idArrayList = (int) ModelDefault.getValueAt(fila_point, columna_point);
+        }
+        int opcion = JOptionPane.showConfirmDialog(null, "¿Eliminar Producto?");
+        //opciones de confir dialog - (si = 0; no = 1; cancel = 2; close = -1)
+        switch (opcion) {
+            case 0: //presione si
+                
+                Cc.eliminar(idArrayList);
+                Limpiar();
+                CargarTablaVentas();
+                break;
+            case 1: //presione no
+                break;
+            default://sea que presione cancel (2) o close (-1)
+                break;
+        }
+    }//GEN-LAST:event_jTable_ventasMouseClicked
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        // nothing
+    }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void btn_comprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_comprarActionPerformed
+        InterComprar compra = new InterComprar();
+        compra.setApellido(apellidoUsuario);
+        compra.setNombre(nombreUsuario);
+        compra.setCedula(cedulaUsuario);
+        compra.setDireccion(direccionUsuario);
+        compra.setIdCliente(idCliente);
+        compra.setVisible(true);
+    }//GEN-LAST:event_btn_comprarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_comprar;
     private javax.swing.JButton jButton_actualizar;
     private javax.swing.JComboBox<String> jComboBox_cliente;
     private javax.swing.JComboBox<String> jComboBox_estado;
@@ -239,17 +313,19 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
      * metodo para mostrar todos los clientes registrados
      * *****************************************************
      */
-    private void CargarTablaVentas() {
+    
+    public void CargarTablaVentas() {
         Connection con = Conexion.conectar();
         DefaultTableModel model = new DefaultTableModel();
-        String sql = "select c.id as id, concat(cl.nombre, ' ', cl.apellido) as cliente, "
+        ModelDefault = model;
+        String sql = "select c.id as id, concat(cl.nombre, ' ', cl.p_apellido) as cliente, "
                 + "c.totalCompra as total, c.fecha as fecha, c.estado , c.cant"
-                + "from carrito as c, cliente as cl where c.idCliente = cl.id;";
+                + " from carrito as c, cliente as cl where c.idCliente= cl.id AND cl.id=" + idCliente+";";
         Statement st;
         try {
             st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            InterGestionarVentas.jTable_ventas = new JTable(model);
+            InterGestionarVentas.jTable_ventas = new JTable(ModelDefault);
             InterGestionarVentas.jScrollPane1.setViewportView(InterGestionarVentas.jTable_ventas);
 
             model.addColumn("N°");//ID
@@ -263,8 +339,8 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
                 Object fila[] = new Object[6];
                 for (int i = 0; i < 6; i++) {
                     if (i == 4) {
-                        String estado = String.valueOf(rs.getObject(i + 1));
-                        if (estado.equalsIgnoreCase("1")) {
+                        int estado = rs.getInt("estado");
+                        if (estado == 1) {
                             fila[i] = "Activo";
                         } else {
                             fila[i] = "Inactivo";
@@ -305,20 +381,21 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
         try {
             Connection con = Conexion.conectar();
             PreparedStatement pst = con.prepareStatement(
-                    "select c.id, c.idCliente, concat(cl.nombre, ' ', cl.apellido) as cliente, "
+                    "select c.id, c.idCliente, "
                     + "c.totalCompra, c.fecha, c.estado  from carrito as c, "
-                    + "cliente as cl where  c.id = '" + idVenta + "' and c.idCliente = cl.id;");
+                    + "cliente as cl where  c.id = " + idVenta + " and c.idCliente ="+idCliente+" limit 1;");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                jComboBox_cliente.setSelectedItem(rs.getString("cliente"));
-                txt_total_pagar.setText(rs.getString("valorPagar"));
-                txt_fecha.setText(rs.getString("fechaVenta"));
+                //jComboBox_cliente.setSelectedItem(rs.getString("cliente"));
+                txt_total_pagar.setText(rs.getString("totalCompra"));
+                txt_fecha.setText(rs.getString("fecha"));
                 int estado = rs.getInt("estado");
                 if (estado == 1) {
                     jComboBox_estado.setSelectedItem("Activo");
                 } else {
                     jComboBox_estado.setSelectedItem("Inactivo");
                 }
+                jComboBox_estado.setEnabled(false);
             }
             con.close();
         } catch (SQLException e) {
@@ -329,18 +406,22 @@ public class InterGestionarVentas extends javax.swing.JInternalFrame {
     /*
     Metodo para cargar los clientes en el jComboBox
      */
-    private void CargarComboClientes() {
+    public void CargarComboClientes() {
         Connection cn = Conexion.conectar();
-        String sql = "select * from cliente";
+        String sql = "select * from cliente where cedula='" + cedulaUsuario +"';";
         Statement st;
         try {
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             jComboBox_cliente.removeAllItems();
-            jComboBox_cliente.addItem("Seleccione cliente:");
             while (rs.next()) {
                 jComboBox_cliente.addItem(rs.getString("nombre") + " " + rs.getString("p_apellido"));
+                idCliente = rs.getInt("id");
+                nombreUsuario = rs.getString("nombre");
+                apellidoUsuario = rs.getString("p_apellido");
+                direccionUsuario = rs.getString("direccion");
             }
+            jComboBox_cliente.setEnabled(false);
             cn.close();
         } catch (SQLException e) {
             System.out.println("¡Error al cargar clientes, !" + e);
