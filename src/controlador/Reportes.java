@@ -35,13 +35,13 @@ public class Reportes {
         try {
             String ruta = System.getProperty("user.home");
             PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Clientes.pdf"));
-            Image header = Image.getInstance("src/img/header1.jpg");
+            Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
             //formato al texto
             Paragraph parrafo = new Paragraph();
             parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \nEdison Zambrano © Programador Fantasma\n\n");
+            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
             parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
             parrafo.add("Reporte de Clientes \n\n");
 
@@ -97,13 +97,13 @@ public class Reportes {
         try {
             String ruta = System.getProperty("user.home");
             PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Productos.pdf"));
-            Image header = Image.getInstance("src/img/header1.jpg");
+            Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
             //formato al texto
             Paragraph parrafo = new Paragraph();
             parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \nEdison Zambrano © Programador Fantasma\n\n");
+            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
             parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
             parrafo.add("Reporte de Productos \n\n");
 
@@ -168,13 +168,13 @@ public class Reportes {
         try {
             String ruta = System.getProperty("user.home");
             PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Categorias.pdf"));
-            Image header = Image.getInstance("src/img/header1.jpg");
+            Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
             //formato al texto
             Paragraph parrafo = new Paragraph();
             parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \nEdison Zambrano © Programador Fantasma\n\n");
+            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
             parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
             parrafo.add("Reporte de Categorias \n\n");
 
@@ -226,13 +226,13 @@ public class Reportes {
         try {
             String ruta = System.getProperty("user.home");
             PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Ventas.pdf"));
-            Image header = Image.getInstance("src/img/header1.jpg");
+            Image header = Image.getInstance("src/img/Background.jpg");
             header.scaleToFit(650, 1000);
             header.setAlignment(Chunk.ALIGN_CENTER);
             //formato al texto
             Paragraph parrafo = new Paragraph();
             parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \nEdison Zambrano © Programador Fantasma\n\n");
+            parrafo.add("Reporte creado por \nAdrian Isidro & Juan Bejarano\n\n");
             parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
             parrafo.add("Reporte de Ventas \n\n");
 

@@ -273,14 +273,20 @@ public class FrmLogin extends javax.swing.JFrame {
             
             if (controlUsuario.loginUser(usuario,this.isAdmin())) {
                 //JOptionPane.showMessageDialog(null, "Login Correcto...");
-                FrmMenu menu = new FrmMenu();
-                menu.setVisible(true);
+                
+                
+                      FrmMenu menu = new FrmMenu(this.isAdmin());
+                      menu.setAdmin(true);
+                      menu.setVisible(true);
+                              }
+              
                 this.dispose();
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Usuario o Clave Incorrectos");
             }
-        } else {
+        } /* else {
             JOptionPane.showMessageDialog(null, "Ingrese sus credenciales");
-        }
+        }*/
     }
-}
+

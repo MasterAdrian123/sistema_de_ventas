@@ -1,16 +1,28 @@
 package vista;
-
+//
 import controlador.Reportes;
 import java.awt.*;
 import javax.swing.JDesktopPane;
 
 public class FrmMenu extends javax.swing.JFrame {
-    public boolean Admin;
+    private boolean Admin;
     public static JDesktopPane jDesktopPane_menu;
 
-    public FrmMenu() {
-        Admin = false;
+    public FrmMenu(Boolean admin) {
         initComponents();
+        
+        if(admin == false){
+            
+            jMenu3.setVisible(false);
+            jMenu6.setVisible(false);
+            jMenu7.setVisible(false);
+            jMenuItem_actualizar_stock.setVisible(false);
+            jMenuItem_nuevo_usuario.setVisible(false);
+            jMenuItem_Gestionar_admins.setVisible(false);
+            jMenuItem_nueva_categoria.setVisible(false);
+            jMenuItem3_nuevo_producto.setVisible(false);
+            
+        }
         this.setSize(new Dimension(1200, 700));
         this.setExtendedState(this.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
@@ -99,7 +111,7 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu1.add(jMenuItem_gestionar_clientes);
 
         jMenuItem_Gestionar_admins.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jMenuItem_Gestionar_admins.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SistemaDeventas1/src/img/configuraciones.png"))); // NOI18N
+        jMenuItem_Gestionar_admins.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/configuraciones.png"))); // NOI18N
         jMenuItem_Gestionar_admins.setText("Gestionar Admin's");
         jMenuItem_Gestionar_admins.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -320,6 +332,7 @@ public class FrmMenu extends javax.swing.JFrame {
     private void jMenuItem_reportes_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_reportes_ventasActionPerformed
         Reportes reporte = new Reportes();
         reporte.ReportesVentas();
+      
     }//GEN-LAST:event_jMenuItem_reportes_ventasActionPerformed
 
     private void jMenuItem_nueva_categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_nueva_categoriaActionPerformed
@@ -421,37 +434,7 @@ public class FrmMenu extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmMenu().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
@@ -483,4 +466,8 @@ public class FrmMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_reportes_ventas;
     private javax.swing.JMenuItem jMenuItem_ver_historial;
     // End of variables declaration//GEN-END:variables
+
+    public void setAdmin(boolean Admin) {
+        this.Admin = Admin;
+    }
 }
